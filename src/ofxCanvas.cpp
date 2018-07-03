@@ -1,34 +1,41 @@
 #include "ofxCanvas.h"
 
 
-
+//--------------------------------------------------------------
 ofxCanvas::ofxCanvas() {
     currentColor = ofColor::black;
     isLine = true;
     lineWidth = 2;
     guiIsVertical = false;
+    guiEnd = 0;
 }
 
+//--------------------------------------------------------------
 ofxCanvas::~ofxCanvas() {
     clearButtons();
 }
 
+//--------------------------------------------------------------
 void ofxCanvas::clearButtons() {
-    for (vector<ofxCanvasButton*>::iterator it = buttons.begin();
+    for (vector<ofxCanvasGuiElement*>::iterator it = buttons.begin();
          it != buttons.end(); ++it) {
         delete (*it);
     }
     buttons.clear();
 }
 
+//--------------------------------------------------------------
 void ofxCanvas::setup(int x, int y, int width, int height, int guiWidth, bool guiIsVertical) {
     this->guiIsVertical = guiIsVertical;
+    this->guiWidth = guiWidth;
     if (guiIsVertical) {
         guiR.set(x, y, guiWidth, height);
         canvasR.set(x + guiWidth + 20, y, width, height);
+        guiEnd = guiR.getY();
     } else {
-        canvasR.set(x, y, width, height);
-        guiR.set(x, y, guiWidth, height);
+        guiR.set(x, y, width, guiWidth);
+        canvasR.set(x, y + guiWidth + 20, width, height);
+        guiEnd = guiR.getX();
     }
     
     ofFbo::Settings settings;
@@ -61,24 +68,72 @@ void ofxCanvas::setup(int x, int y, int width, int height, int guiWidth, bool gu
     ofAddListener(ofxCanvasButtonEvent::events, this, &ofxCanvas::buttonEvent);
 }
 
+//--------------------------------------------------------------
 void ofxCanvas::addDrawOption(string msg, ofColor clr, bool isLine) {
-    int buttonWidth = 200;
-    int buttonHeight = 75;
-    int buttonMargin = 25;
-    
+    int bX, bY, bW, bH, bM;
     int n = buttons.size();
-    int x = guiR.getX() + 5 + (buttonWidth + buttonMargin) * n;
-    int y = guiR.getY() + buttonHeight - 5;
-    
-    ofxCanvasButton *b1 = new ofxCanvasButton();
-    b1->setup(msg, clr, isLine, x, y, buttonWidth, buttonHeight);
-    buttons.push_back(b1);
+    if (guiIsVertical) {
+        bM = 10;
+        bW = guiWidth - 10;
+        bH = 75;
+        bX = guiR.getX() + 5;
+        bY = guiEnd + 5;
+        guiEnd = bY + bH;
+    } else {
+        bM = 10;
+        bW = 120;
+        bH = guiWidth - 10;
+        bX = guiEnd + 5;
+        bY = guiR.getY() + 5;
+        guiEnd = bX + bW;
+    }
+    ofxCanvasButton *button = new ofxCanvasButton();
+    button->setup(msg, clr, isLine, bX, bY, bW, bH, guiIsVertical);
+    buttons.push_back(button);
 }
 
+//--------------------------------------------------------------
+void ofxCanvas::addUndoOption(string msg) {
+    addDrawOption(msg, NULL, NULL);
+}
+
+//--------------------------------------------------------------
+void ofxCanvas::addSlider(string msg) {
+    int bX, bY, bW, bH, bM;
+    int n = buttons.size();
+    if (guiIsVertical) {
+        bM = 10;
+        bW = 0.75 * guiWidth - 10;
+        bH = 200;
+        bX = guiR.getX() + 5 + 0.125 * guiWidth;
+        bY = guiEnd + 5;
+        guiEnd = bY + bH;
+    } else {
+        bM = 10;
+        bW = 200;
+        bH = 0.75 * guiWidth - 10;
+        bX = guiEnd + 5;
+        bY = guiR.getY() + 5 + 0.125 * guiWidth;
+        guiEnd = bX + bW;
+    }
+    ofxCanvasSlider *slider = new ofxCanvasSlider();
+    slider->setup(msg, NULL, NULL, bX, bY, bW, bH, guiIsVertical);
+    buttons.push_back(slider);
+}
+
+//--------------------------------------------------------------
 void ofxCanvas::setCanvasPosition(int x, int y) {
     canvasR.set(x, y, canvasR.getWidth(), canvasR.getHeight());
+    if (guiIsVertical) {
+        guiR.set(x, y, guiWidth, canvasR.getHeight());
+        canvasR.set(x + guiWidth + 20, y, canvasR.getWidth(), canvasR.getHeight());
+    } else {
+        canvasR.set(x, y, canvasR.getWidth(), canvasR.getHeight());
+        guiR.set(x, y, guiWidth, canvasR.getHeight());
+    }
 }
 
+//--------------------------------------------------------------
 void ofxCanvas::setGuiPosition(int x, int y) {
     int x0 = guiR.getX();
     int y0 = guiR.getY();
@@ -89,6 +144,7 @@ void ofxCanvas::setGuiPosition(int x, int y) {
     }
 }
 
+//--------------------------------------------------------------
 void ofxCanvas::update() {
     canvas.begin();
     
@@ -106,12 +162,20 @@ void ofxCanvas::update() {
 
 //--------------------------------------------------------------
 void ofxCanvas::buttonEvent(ofxCanvasButtonEvent &e) {
-    currentColor = e.color;
-    isLine = e.isLine;
-    lineWidth = 2;//e.lineWidth;
-
+    if (e.isLine==NULL && e.color==NULL) {
+        cout << "Null event" << endl;
+        undo();
+    } else {
+        currentColor = e.color;
+        isLine = e.isLine;
+        lineWidth = 2;//e.lineWidth;
+    }
 }
 
+//--------------------------------------------------------------
+void ofxCanvas::undo() {
+    cout << "undo" << endl;
+}
 
 //--------------------------------------------------------------
 void ofxCanvas::drawGui(){

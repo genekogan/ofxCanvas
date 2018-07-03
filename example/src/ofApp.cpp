@@ -3,14 +3,16 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-    canvas.setup(10, 10, 800, 600, 100);
+    canvas.setup(10, 10, 800, 600, 100, false);
     //canvas.setCanvasPosition(100, 10);
     //canvas.setGuiPosition(10, 10);
     
-    canvas.addDrawOption("water", ofColor::blue, false);
+    canvas.addUndoOption("undo");
+    canvas.addDrawOption("water", ofColor(255, 0, 0), false);
     canvas.addDrawOption("park", ofColor::green, false);
     canvas.addDrawOption("buildings", ofColor::red, false);
     canvas.addDrawOption("roads", ofColor::black, true);
+    canvas.addSlider("size");
 }
 
 //--------------------------------------------------------------

@@ -18,8 +18,12 @@ public:
     void clearButtons();
 
     void addDrawOption(string msg, ofColor clr, bool isLine);
+    void addUndoOption(string msg);
+    void addSlider(string msg);
+    
     void buttonEvent(ofxCanvasButtonEvent &e);
-
+    void undo();
+    
     void setCanvasPosition(int x, int y);
     void setGuiPosition(int x, int y);
 
@@ -38,8 +42,10 @@ public:
     
     
     
-    vector<ofxCanvasButton*> buttons;
+    vector<ofxCanvasGuiElement*> buttons;
     bool guiIsVertical;
+    int guiWidth;
+    int guiEnd;
     
     vector<ofVec2f> points;
     

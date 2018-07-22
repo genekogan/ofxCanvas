@@ -1,13 +1,14 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxCanvasButtonEvent.h"
+#include "ofxCanvasSettings.h"
+#include "ofxCanvasEvent.h"
 
 
 class ofxCanvasGuiElement {
 public:
     ofxCanvasGuiElement();
-    void setup(string msg, ofColor color, bool isLine, int x, int y, int w, int h, bool isVertical);
+    void setup(string msg, ofxCanvasSettings settings, int x, int y, int w, int h, bool isVertical);
     
     virtual void draw() { }
 
@@ -16,10 +17,10 @@ public:
     virtual void mousePressed(int x, int y);
     virtual void mouseReleased(int x, int y);
     
+    ofxCanvasSettings settings;
+
     ofRectangle button;
     string msg;
-    ofColor color;
-    bool isLine;
     bool isHover, isPressed;
     bool isVertical;
 };
@@ -39,6 +40,7 @@ public:
     ofxCanvasSlider() : ofxCanvasGuiElement() { }
     void mouseDragged(int x, int y);
     void draw();
+    void sliderChanged();
     
     float value;
 };

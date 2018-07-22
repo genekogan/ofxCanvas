@@ -8,10 +8,9 @@ ofxCanvasGuiElement::ofxCanvasGuiElement() {
 }
 
 //--------------------------------------------------------------
-void ofxCanvasGuiElement::setup(string msg, ofColor color, bool isLine, int x, int y, int w, int h, bool isVertical) {
+void ofxCanvasGuiElement::setup(string msg, ofxCanvasSettings settings, int x, int y, int w, int h, bool isVertical) {
     this->msg = msg;
-    this->color = color;
-    this->isLine = isLine;
+    this->settings = settings;
     this->isVertical = isVertical;
     button = ofRectangle(x, y, w, h);
 }
@@ -40,9 +39,6 @@ void ofxCanvasGuiElement::mouseReleased(int x, int y){
     }
 }
 
-
-
-
 //--------------------------------------------------------------
 void ofxCanvasButton::mouseReleased(int x, int y){
     if (isPressed) {
@@ -70,14 +66,6 @@ void ofxCanvasButton::draw(){
 }
 
 //--------------------------------------------------------------
-void ofxCanvasButton::buttonClicked() {
-    static ofxCanvasButtonEvent newEvent;
-    newEvent.color = color;
-    newEvent.isLine = isLine;
-    ofNotifyEvent(ofxCanvasButtonEvent::events, newEvent);
-}
-
-//--------------------------------------------------------------
 void ofxCanvasSlider::mouseDragged(int x, int y){
     if (isHover) {
         if (isVertical) {
@@ -87,6 +75,7 @@ void ofxCanvasSlider::mouseDragged(int x, int y){
             value = (x - button.getX()) / button.getWidth();
             value = ofClamp(value, 0, 1);
         }
+        sliderChanged();
     }
 }
 
@@ -116,6 +105,18 @@ void ofxCanvasSlider::draw(){
 }
 
 
+//--------------------------------------------------------------
+void ofxCanvasButton::buttonClicked() {
+    static ofxCanvasButtonEvent newEvent;
+    newEvent.settings = settings;
+    ofNotifyEvent(ofxCanvasButtonEvent::events, newEvent);
+}
 
-
+//--------------------------------------------------------------
+void ofxCanvasSlider::sliderChanged() {
+    static ofxCanvasSliderEvent newEvent;
+    newEvent.value = value;
+    newEvent.settings = settings;
+    ofNotifyEvent(ofxCanvasSliderEvent::events, newEvent);
+}
 

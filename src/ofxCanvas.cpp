@@ -5,7 +5,9 @@
 ofxCanvas::ofxCanvas() {
     currentColor = ofColor::black;
     isLine = true;
-    lineWidth = 2;
+    value = 0.5;
+    minWidth = 1;
+    maxWidth = 5;
     guiIsVertical = false;
     guiEnd = 0;
 }
@@ -66,10 +68,11 @@ void ofxCanvas::setup(int x, int y, int width, int height, int guiWidth, bool gu
     toClassify = false;
     
     ofAddListener(ofxCanvasButtonEvent::events, this, &ofxCanvas::buttonEvent);
+    ofAddListener(ofxCanvasSliderEvent::events, this, &ofxCanvas::sliderEvent);
 }
 
 //--------------------------------------------------------------
-void ofxCanvas::addDrawOption(string msg, ofColor clr, bool isLine) {
+void ofxCanvas::addDrawOption(string msg, ofColor color, bool isLine, float minWidth, float maxWidth) {
     int bX, bY, bW, bH, bM;
     int n = buttons.size();
     if (guiIsVertical) {
@@ -87,18 +90,35 @@ void ofxCanvas::addDrawOption(string msg, ofColor clr, bool isLine) {
         bY = guiR.getY() + 5;
         guiEnd = bX + bW;
     }
+    
+    ofxCanvasSettings settings;
+    settings.color = color;
+    settings.isLine = isLine;
+    settings.minWidth = minWidth;
+    settings.maxWidth = maxWidth;
+    
     ofxCanvasButton *button = new ofxCanvasButton();
-    button->setup(msg, clr, isLine, bX, bY, bW, bH, guiIsVertical);
+    button->setup(msg, settings, bX, bY, bW, bH, guiIsVertical);
     buttons.push_back(button);
 }
 
 //--------------------------------------------------------------
-void ofxCanvas::addUndoOption(string msg) {
-    addDrawOption(msg, NULL, NULL);
+void ofxCanvas::addShapeOption(string msg, ofColor color, float minWidth, float maxWidth) {
+    addDrawOption(msg, color, false, minWidth, maxWidth);
 }
 
 //--------------------------------------------------------------
-void ofxCanvas::addSlider(string msg) {
+void ofxCanvas::addLineOption(string msg, ofColor color, float minWidth, float maxWidth) {
+    addDrawOption(msg, color, true, minWidth, maxWidth);
+}
+
+//--------------------------------------------------------------
+void ofxCanvas::addUndoOption(string msg) {
+    addDrawOption(msg, NULL, NULL, NULL, NULL);
+}
+
+//--------------------------------------------------------------
+void ofxCanvas::addSlider(string msg, float minValue, float maxValue) {
     int bX, bY, bW, bH, bM;
     int n = buttons.size();
     if (guiIsVertical) {
@@ -116,8 +136,13 @@ void ofxCanvas::addSlider(string msg) {
         bY = guiR.getY() + 5 + 0.125 * guiWidth;
         guiEnd = bX + bW;
     }
+    
+    ofxCanvasSettings settings;
+    settings.minWidth = minValue;
+    settings.maxWidth = maxValue;
+    
     ofxCanvasSlider *slider = new ofxCanvasSlider();
-    slider->setup(msg, NULL, NULL, bX, bY, bW, bH, guiIsVertical);
+    slider->setup(msg, settings, bX, bY, bW, bH, guiIsVertical);
     buttons.push_back(slider);
 }
 
@@ -149,7 +174,7 @@ void ofxCanvas::update() {
     canvas.begin();
     
     ofSetColor(0);
-    ofSetLineWidth(4);
+    ofSetLineWidth(value);
     ofBeginShape();
     ofNoFill();
     for (int p=0; p<points.size(); p+=5) {
@@ -162,19 +187,32 @@ void ofxCanvas::update() {
 
 //--------------------------------------------------------------
 void ofxCanvas::buttonEvent(ofxCanvasButtonEvent &e) {
-    if (e.isLine==NULL && e.color==NULL) {
-        cout << "Null event" << endl;
+    if (e.settings.isLine == NULL && e.settings.color == NULL) {
         undo();
     } else {
-        currentColor = e.color;
-        isLine = e.isLine;
-        lineWidth = 2;//e.lineWidth;
+        currentColor = e.settings.color;
+        isLine = e.settings.isLine;
+        minWidth = e.settings.minWidth;
+        maxWidth = e.settings.maxWidth;
+        //lineWidth = 2;//e.lineWidth;
     }
 }
 
 //--------------------------------------------------------------
+void ofxCanvas::sliderEvent(ofxCanvasSliderEvent &e) {
+    value = e.value;
+}
+
+//--------------------------------------------------------------
 void ofxCanvas::undo() {
-    cout << "undo" << endl;
+    cout << " INDO " << previous.size() << endl;
+    if (previous.size() < 2) {
+        return;
+    }
+    canvas.begin();
+    previous[previous.size()-2].draw(0, 0);
+    canvas.end();
+    previous.pop_back();
 }
 
 //--------------------------------------------------------------
@@ -259,12 +297,21 @@ void ofxCanvas::mouseDragged(int x, int y){
     canvas.begin();
     
     ofSetColor(currentColor);
-    //ofSetLineWidth(8);
-    ofSetLineWidth(lineWidth);
-    ofBeginShape();
-    ofNoFill();
-    ofDrawLine(x1, y1, x2, y2);
-    ofEndShape();
+    
+    if (isLine) {
+        float lw = ofLerp(minWidth, maxWidth, value);
+        ofSetLineWidth(lw);
+        //cout << minWidth << " " << maxWidth << " " << value << " " << lw << " ----" << endl;
+        ofNoFill();
+        ofDrawLine(x1, y1, x2, y2);
+    }
+    else {
+        ofFill();
+        float rad = ofLerp(minWidth, maxWidth, value);
+        //cout << minWidth << " " << maxWidth << " " << value << " " << rad << " -RAD---" << endl;
+
+        ofDrawEllipse(x2, y2, rad, rad);
+    }
     
     canvas.end();
     
@@ -280,7 +327,15 @@ void ofxCanvas::mousePressed(int x, int y){
 }
 
 //--------------------------------------------------------------
+void ofxCanvas::savePrevious() {
+    previous.resize(previous.size()+1);
+    cout << "now " << previous.size() << endl;
+    canvas.readToPixels(previous[previous.size()-1]);
+}
+
+//--------------------------------------------------------------
 void ofxCanvas::mouseReleased(int x, int y){
+    cout << "rlease" << endl;
     for (auto b : buttons) {
         b->mouseReleased(x, y);
     }
@@ -288,4 +343,10 @@ void ofxCanvas::mouseReleased(int x, int y){
     update();
     toClassify = true;
     points.clear();
+    cout << "cangd is " << changed << endl;
+    
+    if (changed) {
+        changed = false;
+        savePrevious();
+    }
 }

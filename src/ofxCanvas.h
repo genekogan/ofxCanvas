@@ -1,13 +1,17 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxCanvasSettings.h"
 #include "ofxCanvasButton.h"
-#include "ofxCanvasButtonEvent.h"
+#include "ofxCanvasEvent.h"
 
 // todo
 // - when mouse released, "save last" for undo
 // - smoother lines
 // - better interface
+// - perlin distortion
+
+
 
 class ofxCanvas {
 public:
@@ -17,11 +21,16 @@ public:
     void setup(int x, int y, int width, int height, int guiWidth, bool guiIsVertical);
     void clearButtons();
 
-    void addDrawOption(string msg, ofColor clr, bool isLine);
+    void addDrawOption(string msg, ofColor color, bool isLine, float minWidth, float maxWidth);
+    void addShapeOption(string msg, ofColor color, float minWidth, float maxWidth);
+    void addLineOption(string msg, ofColor color, float minWidth, float maxWidth);
+    
     void addUndoOption(string msg);
-    void addSlider(string msg);
+    void addSlider(string msg, float minValue, float maxValue);
     
     void buttonEvent(ofxCanvasButtonEvent &e);
+    void sliderEvent(ofxCanvasSliderEvent &e);
+    
     void undo();
     
     void setCanvasPosition(int x, int y);
@@ -40,6 +49,7 @@ public:
     void mousePressed(int x, int y);
     void mouseReleased(int x, int y);
     
+    void savePrevious();
     
     
     vector<ofxCanvasGuiElement*> buttons;
@@ -51,7 +61,8 @@ public:
     
     ofColor currentColor;
     bool isLine;
-    int lineWidth;
+    float minWidth, maxWidth;
+    float value;
     
     ofRectangle canvasR;
     ofRectangle guiR;
@@ -59,5 +70,7 @@ public:
     ofFbo canvas;
     bool changed;
     bool toClassify;
+    
+    vector<ofImage> previous;
 };
 

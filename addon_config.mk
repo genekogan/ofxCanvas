@@ -52,6 +52,11 @@ common:
 	# they can be specified here
 	ADDON_SOURCES = src/ofxCanvas.cpp
 	ADDON_SOURCES += src/ofxCanvas.h
+	ADDON_SOURCES += src/ofxCanvasButton.cpp
+	ADDON_SOURCES += src/ofxCanvasButton.h
+	ADDON_SOURCES += src/ofxCanvasEvent.cpp
+	ADDON_SOURCES += src/ofxCanvasEvent.h
+	ADDON_SOURCES += src/ofxCanvasSettings.h
 	
 	# some addons need resources to be copied to the bin/data folder of the project
 	# specify here any files that need to be copied, you can use wildcards like * and ?

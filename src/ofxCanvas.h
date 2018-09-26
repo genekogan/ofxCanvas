@@ -24,18 +24,16 @@ public:
     void addDrawOption(string msg, ofColor color, bool isLine, float minWidth, float maxWidth);
     void addShapeOption(string msg, ofColor color, float minWidth, float maxWidth);
     void addLineOption(string msg, ofColor color, float minWidth, float maxWidth);
-    
     void addUndoOption(string msg);
     void addSlider(string msg, float minValue, float maxValue);
-    
-    void buttonEvent(ofxCanvasButtonEvent &e);
-    void sliderEvent(ofxCanvasSliderEvent &e);
-    
+
+    void setBackground(ofColor clr);
+
     void undo();
-    
+
     void setCanvasPosition(int x, int y);
     void setGuiPosition(int x, int y);
-
+    
     void update();
     void draw();
     void drawGui();
@@ -50,15 +48,24 @@ public:
     void mouseReleased(int x, int y);
     
     void savePrevious();
+
+protected:
+
+    void clearCanvas();
     
+    void buttonEvent(ofxCanvasButtonEvent &e);
+    void sliderEvent(ofxCanvasSliderEvent &e);
     
     vector<ofxCanvasGuiElement*> buttons;
     bool guiIsVertical;
     int guiWidth;
     int guiEnd;
+    int width;
+    int height;
     
     vector<ofVec2f> points;
     
+    ofColor bgColor;
     ofColor currentColor;
     bool isLine;
     float minWidth, maxWidth;

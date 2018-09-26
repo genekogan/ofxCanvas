@@ -10,6 +10,7 @@ ofxCanvas::ofxCanvas() {
     maxWidth = 5;
     guiIsVertical = false;
     guiEnd = 0;
+    bgColor = ofColor(255);
 }
 
 //--------------------------------------------------------------
@@ -30,6 +31,8 @@ void ofxCanvas::clearButtons() {
 void ofxCanvas::setup(int x, int y, int width, int height, int guiWidth, bool guiIsVertical) {
     this->guiIsVertical = guiIsVertical;
     this->guiWidth = guiWidth;
+    this->width = width;
+    this->height = height;
     if (guiIsVertical) {
         guiR.set(x, y, guiWidth, height);
         canvasR.set(x + guiWidth + 20, y, width, height);
@@ -48,27 +51,30 @@ void ofxCanvas::setup(int x, int y, int width, int height, int guiWidth, bool gu
     settings.numSamples = 1;
     
     canvas.allocate(settings);
-    //canvas.allocate(width, height);
+    clearCanvas();
+
+    ofAddListener(ofxCanvasButtonEvent::events, this, &ofxCanvas::buttonEvent);
+    ofAddListener(ofxCanvasSliderEvent::events, this, &ofxCanvas::sliderEvent);
     
+    changed = false;
+    toClassify = false;
+}
+
+//--------------------------------------------------------------
+void ofxCanvas::clearCanvas() {
     ofPushMatrix();
     ofPushStyle();
     
     canvas.begin();
     
     ofFill();
-    ofSetColor(255);
+    ofSetColor(bgColor);
     ofDrawRectangle(0, 0, width, height);
     
     canvas.end();
     
     ofPopMatrix();
     ofPopStyle();
-    
-    changed = false;
-    toClassify = false;
-    
-    ofAddListener(ofxCanvasButtonEvent::events, this, &ofxCanvas::buttonEvent);
-    ofAddListener(ofxCanvasSliderEvent::events, this, &ofxCanvas::sliderEvent);
 }
 
 //--------------------------------------------------------------
@@ -147,6 +153,12 @@ void ofxCanvas::addSlider(string msg, float minValue, float maxValue) {
 }
 
 //--------------------------------------------------------------
+void ofxCanvas::setBackground(ofColor clr) {
+    bgColor = clr;
+    clearCanvas();
+}
+
+//--------------------------------------------------------------
 void ofxCanvas::setCanvasPosition(int x, int y) {
     canvasR.set(x, y, canvasR.getWidth(), canvasR.getHeight());
     if (guiIsVertical) {
@@ -205,7 +217,6 @@ void ofxCanvas::sliderEvent(ofxCanvasSliderEvent &e) {
 
 //--------------------------------------------------------------
 void ofxCanvas::undo() {
-    cout << " INDO " << previous.size() << endl;
     if (previous.size() < 2) {
         return;
     }

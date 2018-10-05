@@ -49,9 +49,9 @@ public:
     
     void savePrevious();
 
-protected:
-
     void clearCanvas();
+
+protected:
     
     void buttonEvent(ofxCanvasButtonEvent &e);
     void sliderEvent(ofxCanvasSliderEvent &e);

@@ -49,6 +49,7 @@ public:
     
     void savePrevious();
 
+    void setCanvasFromPixels(ofPixels & pixels);
     void clearCanvas();
 
 protected:

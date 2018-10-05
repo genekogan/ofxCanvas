@@ -77,6 +77,30 @@ void ofxCanvas::clearCanvas() {
     ofPopStyle();
 }
 
+
+//--------------------------------------------------------------
+void ofxCanvas::setCanvasFromPixels(ofPixels & pixels) {
+    ofPushMatrix();
+    ofPushStyle();
+    
+    ofImage newImg;
+    newImg.setFromPixels(pixels);
+
+    canvas.begin();
+    
+    ofFill();
+    ofSetColor(bgColor);
+    ofDrawRectangle(0, 0, width, height);
+    ofSetColor(255);
+    newImg.draw(0, 0, width, height);
+    
+    canvas.end();
+    
+    ofPopMatrix();
+    ofPopStyle();
+
+}
+
 //--------------------------------------------------------------
 void ofxCanvas::addDrawOption(string msg, ofColor color, bool isLine, float minWidth, float maxWidth) {
     int bX, bY, bW, bH, bM;

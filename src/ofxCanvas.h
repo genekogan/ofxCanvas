@@ -25,6 +25,7 @@ public:
     void addShapeOption(string msg, ofColor color, float minWidth, float maxWidth);
     void addLineOption(string msg, ofColor color, float minWidth, float maxWidth);
     void addUndoOption(string msg);
+    void addClearOption(string msg);
     void addSlider(string msg, float minValue, float maxValue);
 
     void setBackground(ofColor clr);

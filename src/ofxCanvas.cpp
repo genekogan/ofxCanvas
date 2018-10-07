@@ -51,7 +51,7 @@ void ofxCanvas::setup(int x, int y, int width, int height, int guiWidth, bool gu
     settings.numSamples = 1;
     
     canvas.allocate(settings);
-    clearCanvas();
+    clear();
 
     ofAddListener(ofxCanvasButtonEvent::events, this, &ofxCanvas::buttonEvent);
     ofAddListener(ofxCanvasSliderEvent::events, this, &ofxCanvas::sliderEvent);
@@ -148,6 +148,11 @@ void ofxCanvas::addUndoOption(string msg) {
 }
 
 //--------------------------------------------------------------
+void ofxCanvas::addClearOption(string msg) {
+    addDrawOption(msg, ofColor::black, NULL, NULL, NULL);
+}
+
+//--------------------------------------------------------------
 void ofxCanvas::addSlider(string msg, float minValue, float maxValue) {
     int bX, bY, bW, bH, bM;
     int n = buttons.size();
@@ -179,7 +184,7 @@ void ofxCanvas::addSlider(string msg, float minValue, float maxValue) {
 //--------------------------------------------------------------
 void ofxCanvas::setBackground(ofColor clr) {
     bgColor = clr;
-    clearCanvas();
+    clear();
 }
 
 //--------------------------------------------------------------
@@ -228,9 +233,13 @@ void ofxCanvas::setCurrentColor(ofColor clr) {
 
 //--------------------------------------------------------------
 void ofxCanvas::buttonEvent(ofxCanvasButtonEvent &e) {
-    if (e.settings.isLine == NULL && e.settings.color == NULL) {
+    if (e.settings.isLine == NULL && e.settings.color == ofColor::black) {
+        clear();
+    }
+    else if (e.settings.isLine == NULL && e.settings.color == NULL) {
         undo();
-    } else {
+    } 
+    else {
         setCurrentColor(e.settings.color);
         isLine = e.settings.isLine;
         minWidth = e.settings.minWidth;

@@ -222,11 +222,16 @@ void ofxCanvas::update() {
 }
 
 //--------------------------------------------------------------
+void ofxCanvas::setCurrentColor(ofColor clr) {
+    currentColor = clr;
+}
+
+//--------------------------------------------------------------
 void ofxCanvas::buttonEvent(ofxCanvasButtonEvent &e) {
     if (e.settings.isLine == NULL && e.settings.color == NULL) {
         undo();
     } else {
-        currentColor = e.settings.color;
+        setCurrentColor(e.settings.color);
         isLine = e.settings.isLine;
         minWidth = e.settings.minWidth;
         maxWidth = e.settings.maxWidth;

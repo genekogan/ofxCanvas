@@ -28,6 +28,7 @@ public:
     void addSlider(string msg, float minValue, float maxValue);
 
     void setBackground(ofColor clr);
+    void setCurrentColor(ofColor clr);
 
     void undo();
 

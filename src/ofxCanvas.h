@@ -50,8 +50,8 @@ public:
     
     void savePrevious();
 
-    void setCanvasFromPixels(ofPixels & pixels);
-    void clearCanvas();
+    void setFromPixels(ofPixels & pixels);
+    void clear();
 
 protected:
     

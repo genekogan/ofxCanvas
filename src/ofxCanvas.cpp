@@ -61,7 +61,7 @@ void ofxCanvas::setup(int x, int y, int width, int height, int guiWidth, bool gu
 }
 
 //--------------------------------------------------------------
-void ofxCanvas::clearCanvas() {
+void ofxCanvas::clear() {
     ofPushMatrix();
     ofPushStyle();
     
@@ -79,7 +79,7 @@ void ofxCanvas::clearCanvas() {
 
 
 //--------------------------------------------------------------
-void ofxCanvas::setCanvasFromPixels(ofPixels & pixels) {
+void ofxCanvas::setFromPixels(ofPixels & pixels) {
     ofPushMatrix();
     ofPushStyle();
     
@@ -369,13 +369,11 @@ void ofxCanvas::mousePressed(int x, int y){
 //--------------------------------------------------------------
 void ofxCanvas::savePrevious() {
     previous.resize(previous.size()+1);
-    cout << "now " << previous.size() << endl;
     canvas.readToPixels(previous[previous.size()-1]);
 }
 
 //--------------------------------------------------------------
 void ofxCanvas::mouseReleased(int x, int y){
-    cout << "rlease" << endl;
     for (auto b : buttons) {
         b->mouseReleased(x, y);
     }
@@ -383,7 +381,6 @@ void ofxCanvas::mouseReleased(int x, int y){
     update();
     toClassify = true;
     points.clear();
-    cout << "cangd is " << changed << endl;
     
     if (changed) {
         changed = false;

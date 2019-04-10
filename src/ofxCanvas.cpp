@@ -58,6 +58,8 @@ void ofxCanvas::setup(int x, int y, int width, int height, int guiWidth, bool gu
     
     changed = false;
     toClassify = false;
+    
+    savePrevious();
 }
 
 //--------------------------------------------------------------
@@ -144,7 +146,7 @@ void ofxCanvas::addLineOption(string msg, ofColor color, float minWidth, float m
 
 //--------------------------------------------------------------
 void ofxCanvas::addUndoOption(string msg) {
-    addDrawOption(msg, NULL, NULL, NULL, NULL);
+    addDrawOption(msg, ofColor(0, 0, 0, 0), NULL, NULL, NULL);
 }
 
 //--------------------------------------------------------------
@@ -233,10 +235,10 @@ void ofxCanvas::setCurrentColor(ofColor clr) {
 
 //--------------------------------------------------------------
 void ofxCanvas::buttonEvent(ofxCanvasButtonEvent &e) {
-    if (e.settings.isLine == NULL && e.settings.color == ofColor::black) {
+    if (e.settings.isLine == NULL && (e.settings.color == ofColor::black)) {
         clear();
     }
-    else if (e.settings.isLine == NULL && e.settings.color == NULL) {
+    else if (e.settings.isLine == NULL && e.settings.color == ofColor(0, 0, 0, 0)) {
         undo();
     } 
     else {
@@ -258,6 +260,7 @@ void ofxCanvas::undo() {
     if (previous.size() < 2) {
         return;
     }
+    
     canvas.begin();
     previous[previous.size()-2].draw(0, 0);
     canvas.end();
@@ -358,7 +361,6 @@ void ofxCanvas::mouseDragged(int x, int y){
         ofFill();
         float rad = ofLerp(minWidth, maxWidth, value);
         //cout << minWidth << " " << maxWidth << " " << value << " " << rad << " -RAD---" << endl;
-
         ofDrawEllipse(x2, y2, rad, rad);
     }
     
@@ -377,8 +379,9 @@ void ofxCanvas::mousePressed(int x, int y){
 
 //--------------------------------------------------------------
 void ofxCanvas::savePrevious() {
-    previous.resize(previous.size()+1);
-    canvas.readToPixels(previous[previous.size()-1]);
+    ofImage prev;
+    canvas.readToPixels(prev);
+    previous.push_back(prev);
 }
 
 //--------------------------------------------------------------

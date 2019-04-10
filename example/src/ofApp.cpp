@@ -8,17 +8,6 @@ void ofApp::setup(){
     //canvas.setGuiPosition(10, 10);
     
     
-    vector<int> h;
-    h.push_back(1);
-    h.push_back(2);
-    h.push_back(3);
-    h.push_back(4);
-    cout << "h is " << h.size() << endl;
-    cout << ofToString(h) << endl;
-    h.pop_back();
-    cout << "h is now " << h.size() << endl;
-    cout << ofToString(h) << endl;
-    
     canvas.addUndoOption("undo");
     canvas.addShapeOption("water", ofColor::blue, 10, 100);
     canvas.addShapeOption("park", ofColor::green, 10, 100);

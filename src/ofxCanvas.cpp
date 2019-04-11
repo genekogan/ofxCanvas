@@ -11,6 +11,8 @@ ofxCanvas::ofxCanvas() {
     guiIsVertical = false;
     guiEnd = 0;
     bgColor = ofColor(255);
+    toUndo = false;
+    toClear = false;
 }
 
 //--------------------------------------------------------------
@@ -33,6 +35,7 @@ void ofxCanvas::setup(int x, int y, int width, int height, int guiWidth, bool gu
     this->guiWidth = guiWidth;
     this->width = width;
     this->height = height;
+
     if (guiIsVertical) {
         guiR.set(x, y, guiWidth, height);
         canvasR.set(x + guiWidth + 20, y, width, height);
@@ -55,10 +58,10 @@ void ofxCanvas::setup(int x, int y, int width, int height, int guiWidth, bool gu
 
     ofAddListener(ofxCanvasButtonEvent::events, this, &ofxCanvas::buttonEvent);
     ofAddListener(ofxCanvasSliderEvent::events, this, &ofxCanvas::sliderEvent);
-    
+
     changed = false;
     toClassify = false;
-    
+
     savePrevious();
 }
 
@@ -103,7 +106,6 @@ void ofxCanvas::setFromPixels(ofPixels & pixels) {
     
     ofPopMatrix();
     ofPopStyle();
-
 }
 
 //--------------------------------------------------------------
@@ -217,6 +219,15 @@ void ofxCanvas::setGuiPosition(int x, int y) {
 
 //--------------------------------------------------------------
 void ofxCanvas::update() {
+    if (toClear) {
+        clear();
+        toClear = false;
+    }
+    if (toUndo) {
+        undo();
+        toUndo = false;
+    }
+
     canvas.begin();
     
     ofSetColor(0);
@@ -239,10 +250,10 @@ void ofxCanvas::setCurrentColor(ofColor clr) {
 //--------------------------------------------------------------
 void ofxCanvas::buttonEvent(ofxCanvasButtonEvent &e) {
     if (e.settings.isLine == NULL && (e.settings.color == ofColor::black)) {
-        clear();
+        toClear = true;
     }
     else if (e.settings.isLine == NULL && e.settings.color == ofColor(0, 0, 0, 0)) {
-        undo();
+        toUndo = true;
     } 
     else {
         setCurrentColor(e.settings.color);

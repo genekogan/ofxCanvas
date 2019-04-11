@@ -77,6 +77,9 @@ void ofxCanvas::clear() {
     
     ofPopMatrix();
     ofPopStyle();
+
+    changed = true;
+    toClassify = true;
 }
 
 
@@ -265,6 +268,9 @@ void ofxCanvas::undo() {
     previous[previous.size()-2].draw(0, 0);
     canvas.end();
     previous.pop_back();
+
+    changed = true;
+    toClassify = true;
 }
 
 //--------------------------------------------------------------

@@ -38,31 +38,37 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
+    cout << "MM "<<x << " " << y << endl;
     canvas.mouseMoved(x, y);
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
+    cout << "MD "<<x << " " << y << endl;
     canvas.mouseDragged(x, y);
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
+    cout << "MP "<<x << " " << y << endl;
     canvas.mousePressed(x, y);
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
+    cout << "MR "<<x << " " << y << endl;
     canvas.mouseReleased(x, y);
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseEntered(int x, int y){
+    cout << "Me "<<x << " " << y << endl;
 
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseExited(int x, int y){
+    cout << "Mx "<<x << " " << y << endl;
 
 }
 

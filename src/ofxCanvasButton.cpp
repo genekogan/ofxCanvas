@@ -16,6 +16,12 @@ void ofxCanvasGuiElement::setup(string msg, ofxCanvasSettings settings, int x, i
 }
 
 //--------------------------------------------------------------
+void ofxCanvasGuiElement::addIcon(string iconPath) {
+    icon.load(iconPath);
+    icon.resize(button.getWidth(), button.getHeight());
+}
+
+//--------------------------------------------------------------
 void ofxCanvasGuiElement::mouseMoved(int x, int y){
     isHover = button.inside(x, y);
 }
@@ -61,7 +67,11 @@ void ofxCanvasButton::draw(){
     ofDrawRectangle(button);
     ofSetColor(0);
     
-    ofDrawBitmapString(msg, button.x, button.y+20);
+    if (icon.isAllocated()) {
+        icon.draw(button.x, button.y);
+    } else {
+        ofDrawBitmapString(msg, button.x, button.y+20);
+    }
     ofPopStyle();
 }
 

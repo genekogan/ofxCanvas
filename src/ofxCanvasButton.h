@@ -10,6 +10,7 @@ public:
     ofxCanvasGuiElement();
     void setup(string msg, ofxCanvasSettings settings, int x, int y, int w, int h, bool isVertical);
     
+    virtual void addIcon(string iconPath);
     virtual void draw() { }
 
     virtual void mouseMoved(int x, int y);
@@ -19,6 +20,7 @@ public:
     
     ofxCanvasSettings settings;
 
+    ofImage icon;
     ofRectangle button;
     string msg;
     bool isHover, isPressed;

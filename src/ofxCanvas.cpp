@@ -113,7 +113,7 @@ void ofxCanvas::setFromPixels(ofPixels & pixels) {
 }
 
 //--------------------------------------------------------------
-void ofxCanvas::addDrawOption(string msg, ofColor color, bool isLine, float minWidth, float maxWidth) {
+void ofxCanvas::addDrawOption(string msg, ofColor color, bool isLine, float minWidth, float maxWidth, string iconPath) {
     int bX, bY, bW, bH, bM;
     int n = buttons.size();
     if (guiIsVertical) {
@@ -140,27 +140,30 @@ void ofxCanvas::addDrawOption(string msg, ofColor color, bool isLine, float minW
     
     ofxCanvasButton *button = new ofxCanvasButton();
     button->setup(msg, settings, bX, bY, bW, bH, guiIsVertical);
+    if (iconPath != "__NONE__") {
+        button->addIcon(iconPath);
+    }
     buttons.push_back(button);
 }
 
 //--------------------------------------------------------------
-void ofxCanvas::addShapeOption(string msg, ofColor color, float minWidth, float maxWidth) {
-    addDrawOption(msg, color, false, minWidth, maxWidth);
+void ofxCanvas::addShapeOption(string msg, ofColor color, float minWidth, float maxWidth, string iconPath) {
+    addDrawOption(msg, color, false, minWidth, maxWidth, iconPath);
 }
 
 //--------------------------------------------------------------
-void ofxCanvas::addLineOption(string msg, ofColor color, float minWidth, float maxWidth) {
-    addDrawOption(msg, color, true, minWidth, maxWidth);
+void ofxCanvas::addLineOption(string msg, ofColor color, float minWidth, float maxWidth, string iconPath) {
+    addDrawOption(msg, color, true, minWidth, maxWidth, iconPath);
 }
 
 //--------------------------------------------------------------
-void ofxCanvas::addUndoOption(string msg) {
-    addDrawOption(msg, ofColor(0, 0, 0, 0), NULL, NULL, NULL);
+void ofxCanvas::addUndoOption(string msg, string iconPath) {
+    addDrawOption(msg, ofColor(0, 0, 0, 0), NULL, NULL, NULL, iconPath);
 }
 
 //--------------------------------------------------------------
-void ofxCanvas::addClearOption(string msg) {
-    addDrawOption(msg, ofColor::black, NULL, NULL, NULL);
+void ofxCanvas::addClearOption(string msg, string iconPath) {
+    addDrawOption(msg, ofColor::black, NULL, NULL, NULL, iconPath);
 }
 
 //--------------------------------------------------------------

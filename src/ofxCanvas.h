@@ -80,7 +80,9 @@ protected:
     ofFbo canvas;
     bool changed;
     bool toClassify;
-    bool toUndo, toClear;
+    bool toSavePrev;
+    bool toUndo;
+    bool toClear;
     
     vector<ofImage> previous;
 };

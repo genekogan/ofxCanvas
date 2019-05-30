@@ -61,6 +61,9 @@ void ofxCanvas::setup(int x, int y, int width, int height, int guiWidth, bool gu
 
     changed = false;
     toClassify = false;
+    toSavePrev = false;
+    toUndo = false;
+    toClear = false;
 
     savePrevious();
 }
@@ -82,6 +85,7 @@ void ofxCanvas::clear() {
     ofPopStyle();
 
     changed = true;
+    toSavePrev = true;
     toClassify = true;
 }
 
@@ -303,22 +307,8 @@ void ofxCanvas::draw(){
     ofSetColor(255);
     canvas.draw(canvasR.getX(), canvasR.getY());
     
-    //
-    //    ofPushMatrix();
-    //    ofTranslate(100, 100);
-    //    ofSetColor(0);
-    //    ofSetLineWidth(8);
-    //    ofBeginShape();
-    //    ofNoFill();
-    ////    for (int p=0; p<points.size(); p+=10) {
-    ////        ofCurveVertex(points[p].x, points[p].y);
-    ////    }
-    //    ofEndShape();
-    //    ofPopMatrix();
-    
     ofPopMatrix();
-    ofPopStyle();
-    
+    ofPopStyle();    
 }
 
 //--------------------------------------------------------------
@@ -359,9 +349,12 @@ void ofxCanvas::mouseDragged(int x, int y){
     float x2 = ofGetMouseX()-canvasR.getX();
     float y2 = ofGetMouseY()-canvasR.getY();
     
-    // when should this change
-    changed = true;
+    if (x2 < 0 || x2 > canvasR.getWidth() || y2 < 0 || y2 > canvasR.getHeight()) {
+        return;
+    }
     
+    changed = true;
+    toSavePrev = true;
     
     canvas.begin();
     
@@ -370,20 +363,16 @@ void ofxCanvas::mouseDragged(int x, int y){
     if (isLine) {
         float lw = ofLerp(minWidth, maxWidth, value);
         ofSetLineWidth(lw);
-        //cout << minWidth << " " << maxWidth << " " << value << " " << lw << " ----" << endl;
         ofNoFill();
         ofDrawLine(x1, y1, x2, y2);
     }
     else {
         ofFill();
         float rad = ofLerp(minWidth, maxWidth, value);
-        //cout << minWidth << " " << maxWidth << " " << value << " " << rad << " -RAD---" << endl;
         ofDrawEllipse(x2, y2, rad, rad);
     }
     
     canvas.end();
-    
-    //points.push_back(ofVec2f(x2, y2));
 }
 
 //--------------------------------------------------------------
@@ -391,7 +380,6 @@ void ofxCanvas::mousePressed(int x, int y){
     for (auto b : buttons) {
         b->mousePressed(x, y);
     }
-
 }
 
 //--------------------------------------------------------------
@@ -411,8 +399,8 @@ void ofxCanvas::mouseReleased(int x, int y){
     toClassify = true;
     points.clear();
     
-    if (changed) {
-        changed = false;
+    if (toSavePrev) {
+        toSavePrev = false;
         savePrevious();
     }
 }

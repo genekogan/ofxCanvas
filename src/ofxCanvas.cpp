@@ -119,14 +119,14 @@ void ofxCanvas::addDrawOption(string msg, ofColor color, bool isLine, float minW
     if (guiIsVertical) {
         bM = 10;
         bW = guiWidth - 10;
-        bH = 75;
+        bH = bW;
         bX = guiR.getX() + 5;
         bY = guiEnd + 5;
         guiEnd = bY + bH;
     } else {
         bM = 10;
-        bW = 120;
         bH = guiWidth - 10;
+        bW = bH;
         bX = guiEnd + 5;
         bY = guiR.getY() + 5;
         guiEnd = bX + bW;

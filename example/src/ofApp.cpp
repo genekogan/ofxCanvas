@@ -3,16 +3,18 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-    canvas.setup(10, 10, 800, 600, 125, false);
+    canvas.setup(10, 140, 800, 600);
     //canvas.setCanvasPosition(100, 10);
     //canvas.setGuiPosition(10, 10);
     
-    canvas.addUndoOption("undo", "undo.png");
-    canvas.addShapeOption("water", ofColor::blue, 10, 100, "water.png");
-    canvas.addShapeOption("park", ofColor::green, 10, 100, "tree.png");
-    canvas.addShapeOption("buildings", ofColor::red, 5, 50, "house.png");
-    canvas.addLineOption("roads", ofColor::black, 1, 10, "road.png");
-    canvas.addSlider("size", 0, 1);
+    panel.setup(10, 10, 125, false);
+    panel.addClearOption("clear", "clear.png");
+    panel.addUndoOption("undo", "undo.png");
+    panel.addShapeOption("water", ofColor::blue, 10, 100, "water.png");
+    panel.addShapeOption("park", ofColor::green, 10, 100, "tree.png");
+    panel.addShapeOption("buildings", ofColor::red, 5, 50, "house.png");
+    panel.addLineOption("roads", ofColor::black, 1, 10, "road.png");
+    panel.addSlider("size", 0, 1);
 }
 
 //--------------------------------------------------------------
@@ -22,7 +24,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     canvas.draw();
-    canvas.drawGui();
+    panel.draw();
 }
 
 //--------------------------------------------------------------

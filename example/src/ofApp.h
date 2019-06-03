@@ -24,4 +24,5 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		
     ofxCanvas canvas;
+    ofxCanvasPanel panel;
 };

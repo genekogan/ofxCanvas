@@ -52,6 +52,8 @@ common:
 	# they can be specified here
 	ADDON_SOURCES = src/ofxCanvas.cpp
 	ADDON_SOURCES += src/ofxCanvas.h
+	ADDON_SOURCES += src/ofxCanvasPanel.cpp
+	ADDON_SOURCES += src/ofxCanvasPanel.h
 	ADDON_SOURCES += src/ofxCanvasButton.cpp
 	ADDON_SOURCES += src/ofxCanvasButton.h
 	ADDON_SOURCES += src/ofxCanvasEvent.cpp

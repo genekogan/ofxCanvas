@@ -5,50 +5,29 @@
 #include "ofxCanvasButton.h"
 #include "ofxCanvasEvent.h"
 
-// todo
-// - when mouse released, "save last" for undo
-// - smoother lines
-// - better interface
-// - perlin distortion
+#include "ofxCanvasPanel.h"
 
 
+class ofxCanvasPanel;
 
 class ofxCanvas {
 public:
     ofxCanvas();
     ~ofxCanvas();
-    
-    void setup(int x, int y, int width, int height, int guiWidth, bool guiIsVertical);
-    void clearButtons();
 
-    void addDrawOption(string msg, ofColor color, bool isLine, float minWidth, float maxWidth, string iconPath);
-    void addDrawOption(string msg, ofColor color, bool isLine, float minWidth, float maxWidth) {addDrawOption(msg, color, isLine, minWidth, maxWidth, "__NONE__");}
+    void addPanel(ofxCanvasPanel * panel);
 
-    void addLineOption(string msg, ofColor color, float minWidth, float maxWidth, string iconPath);
-    void addLineOption(string msg, ofColor color, float minWidth, float maxWidth) {addLineOption(msg, color, minWidth, maxWidth, "__NONE__");}
-
-    void addShapeOption(string msg, ofColor color, float minWidth, float maxWidth, string iconPath);
-    void addShapeOption(string msg, ofColor color, float minWidth, float maxWidth) {addShapeOption(msg, color, minWidth, maxWidth, "__NONE__");}
-    
-    void addUndoOption(string msg, string iconPath);
-    void addUndoOption(string msg) {addUndoOption(msg, NULL);}
-
-    void addClearOption(string msg, string iconPath);
-    void addClearOption(string msg) {addClearOption(msg, NULL);}
-    
-    void addSlider(string msg, float minValue, float maxValue);
-
+    void setup(int x, int y, int width, int height);
     void setBackground(ofColor clr);
     void setCurrentColor(ofColor clr);
 
     void undo();
 
-    void setCanvasPosition(int x, int y);
-    void setGuiPosition(int x, int y);
+    void setPosition(int x, int y);
     
     void update();
     void draw();
-    void drawGui();
+    void drawPanels();
     
     ofFbo & getCanvas() {return canvas;}
     bool isFrameNew();
@@ -66,27 +45,15 @@ public:
 
 protected:
     
-    void buttonEvent(ofxCanvasButtonEvent &e);
-    void sliderEvent(ofxCanvasSliderEvent &e);
-    
-    vector<ofxCanvasGuiElement*> buttons;
-    bool guiIsVertical;
-    int guiWidth;
-    int guiEnd;
     int width;
     int height;
-    
-    vector<ofVec2f> points;
-    
-    ofColor bgColor;
-    ofColor currentColor;
     bool isLine;
     float minWidth, maxWidth;
     float value;
-    
+    ofColor bgColor;
+    ofColor currentColor;
+
     ofRectangle canvasR;
-    ofRectangle guiR;
-    
     ofFbo canvas;
     bool changed;
     bool toClassify;
@@ -95,5 +62,8 @@ protected:
     bool toClear;
     
     vector<ofImage> previous;
+    vector<ofVec2f> points;
+    vector<ofxCanvasPanel*> panels;
+
 };
 

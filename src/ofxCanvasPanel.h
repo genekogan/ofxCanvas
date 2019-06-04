@@ -19,22 +19,22 @@ public:
     
     void draw();
     
-    void addDrawOption(string msg, ofColor color, bool isLine, float minWidth, float maxWidth, string iconPath);
-    void addDrawOption(string msg, ofColor color, bool isLine, float minWidth, float maxWidth) {addDrawOption(msg, color, isLine, minWidth, maxWidth, "__NONE__");}
+    void addDrawOption(string name, ofColor color, bool isLine, float minWidth, float maxWidth, string iconPath);
+    void addDrawOption(string name, ofColor color, bool isLine, float minWidth, float maxWidth) {addDrawOption(name, color, isLine, minWidth, maxWidth, "__NONE__");}
     
-    void addLineOption(string msg, ofColor color, float minWidth, float maxWidth, string iconPath);
-    void addLineOption(string msg, ofColor color, float minWidth, float maxWidth) {addLineOption(msg, color, minWidth, maxWidth, "__NONE__");}
+    void addLineOption(string name, ofColor color, float minWidth, float maxWidth, string iconPath);
+    void addLineOption(string name, ofColor color, float minWidth, float maxWidth) {addLineOption(name, color, minWidth, maxWidth, "__NONE__");}
     
-    void addShapeOption(string msg, ofColor color, float minWidth, float maxWidth, string iconPath);
-    void addShapeOption(string msg, ofColor color, float minWidth, float maxWidth) {addShapeOption(msg, color, minWidth, maxWidth, "__NONE__");}
+    void addShapeOption(string name, ofColor color, float minWidth, float maxWidth, string iconPath);
+    void addShapeOption(string name, ofColor color, float minWidth, float maxWidth) {addShapeOption(name, color, minWidth, maxWidth, "__NONE__");}
     
-    void addUndoOption(string msg, string iconPath);
-    void addUndoOption(string msg) {addUndoOption(msg, NULL);}
+    void addUndoOption(string name, string iconPath);
+    void addUndoOption(string name) {addUndoOption(name, NULL);}
     
-    void addClearOption(string msg, string iconPath);
-    void addClearOption(string msg) {addClearOption(msg, NULL);}
+    void addClearOption(string name, string iconPath);
+    void addClearOption(string name) {addClearOption(name, NULL);}
     
-    void addSlider(string msg, float minValue, float maxValue);
+    void addSlider(string name, float minValue, float maxValue);
     
     void clearButtons();
     

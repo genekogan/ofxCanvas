@@ -76,6 +76,7 @@ void ofxCanvas::setFromPixels(ofPixels & pixels) {
     
     ofImage newImg;
     newImg.setFromPixels(pixels);
+    newImg.resize(width, height);
 
     canvas.begin();
     
@@ -83,12 +84,19 @@ void ofxCanvas::setFromPixels(ofPixels & pixels) {
     ofSetColor(bgColor);
     ofDrawRectangle(0, 0, width, height);
     ofSetColor(255);
-    newImg.draw(0, 0, width, height);
+    newImg.draw(0, 0);
     
     canvas.end();
     
     ofPopMatrix();
     ofPopStyle();
+}
+
+//--------------------------------------------------------------
+void ofxCanvas::setFromImage(string path) {
+    ofImage img;
+    img.load(path);
+    setFromPixels(img.getPixels());
 }
 
 //--------------------------------------------------------------

@@ -1,88 +1,26 @@
 #include "ofxCanvasButton.h"
 
+
 //--------------------------------------------------------------
-ofxCanvasGuiElement::ofxCanvasGuiElement() {
-    isHover = false;
-    isPressed = false;
+ofxCanvasGuiElement::ofxCanvasGuiElement() : ofxClickable() {
     isVertical = false;
 }
 
 //--------------------------------------------------------------
 void ofxCanvasGuiElement::setup(string msg, ofxCanvasSettings settings, int x, int y, int w, int h, bool isVertical) {
-    this->msg = msg;
-    this->settings = settings;
+    ofxClickable::setup(msg, x, y, w, h);
     this->isVertical = isVertical;
-    button = ofRectangle(x, y, w, h);
-}
-
-//--------------------------------------------------------------
-void ofxCanvasGuiElement::addIcon(string iconPath) {
-    icon.load(iconPath);
-    icon.resize(button.getWidth(), button.getHeight());
-}
-
-//--------------------------------------------------------------
-void ofxCanvasGuiElement::mouseMoved(int x, int y){
-    isHover = button.inside(x, y);
-}
-
-//--------------------------------------------------------------
-void ofxCanvasGuiElement::mouseDragged(int x, int y){
-    
-}
-
-//--------------------------------------------------------------
-void ofxCanvasGuiElement::mousePressed(int x, int y){
-    if (isHover) {
-        isPressed = true;
-    }
-}
-
-//--------------------------------------------------------------
-void ofxCanvasGuiElement::mouseReleased(int x, int y){
-    if (isPressed) {
-        isPressed = false;
-    }
-}
-
-//--------------------------------------------------------------
-void ofxCanvasButton::mouseReleased(int x, int y){
-    if (isPressed) {
-        isPressed = false;
-        buttonClicked();
-    }
-}
-
-//--------------------------------------------------------------
-void ofxCanvasButton::draw(){
-    ofPushStyle();
-    if (isPressed) {
-        ofSetColor(ofColor::red);
-    } else if (isHover) {
-        ofSetColor(ofColor::orange);
-    } else {
-        ofSetColor(ofColor::white);
-    }
-    ofFill();
-    ofDrawRectangle(button);
-    ofSetColor(0);
-    
-    if (icon.isAllocated()) {
-        icon.draw(button.x, button.y);
-    } else {
-        ofDrawBitmapString(msg, button.x, button.y+20);
-    }
-    ofPopStyle();
+    this->settings = settings;
 }
 
 //--------------------------------------------------------------
 void ofxCanvasSlider::mouseDragged(int x, int y){
     if (isHover) {
         if (isVertical) {
-            value = (y - button.getY()) / button.getHeight();
+            value = (y - rect.getY()) / rect.getHeight();
             value = ofClamp(value, 0, 1);
         } else {
-            value = (x - button.getX()) / button.getWidth();
+            value = (x - rect.getX()) / rect.getWidth();
             value = ofClamp(value, 0, 1);
         }
         sliderChanged();
@@ -92,25 +30,29 @@ void ofxCanvasSlider::mouseDragged(int x, int y){
 //--------------------------------------------------------------
 void ofxCanvasSlider::draw(){
     ofPushStyle();
-    if (isPressed) {
-        ofSetColor(ofColor::red);
-    } else if (isHover) {
-        ofSetColor(ofColor::orange);
-    } else {
-        ofSetColor(ofColor::white);
+
+    if (isActive) {
+        ofSetColor(cActive);
     }
+    if (isHover) {
+        ofSetColor(cHover);
+    }
+    if (isPressed) {
+        ofSetColor(cPressed);
+    }
+    
     ofFill();
-    ofDrawRectangle(button);
+    ofDrawRectangle(rect);
     ofSetColor(0);
     
     ofSetColor(0, 255, 0);
     if (isVertical) {
-        ofDrawRectangle(button.getX(), button.getY() + value * button.getHeight(), button.getWidth(), 5);
+        ofDrawRectangle(rect.getX(), rect.getY() + value * rect.getHeight(), rect.getWidth(), 5);
     } else {
-        ofDrawRectangle(button.getX() + value * button.getWidth(), button.getY(), 5, button.getHeight());
+        ofDrawRectangle(rect.getX() + value * rect.getWidth(), rect.getY(), 5, rect.getHeight());
     }
     
-    ofDrawBitmapString(msg, button.x, button.y+20);
+    ofDrawBitmapString(name, rect.getX(), rect.getY()+20);
     ofPopStyle();
 }
 

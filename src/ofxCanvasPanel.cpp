@@ -56,13 +56,16 @@ void ofxCanvasPanel::buttonEvent(ofxCanvasButtonEvent &e) {
         canvas->minWidth = e.settings.minWidth;
         canvas->maxWidth = e.settings.maxWidth;
     }
+    
+    for (auto b : buttons) {
+        b->setActive(b->getName() == e.settings.name);        
+    }
 }
 
 //--------------------------------------------------------------
 void ofxCanvasPanel::sliderEvent(ofxCanvasSliderEvent &e) {
     canvas->value = e.value;
 }
-
 
 //--------------------------------------------------------------
 void ofxCanvasPanel::draw() {
@@ -84,9 +87,8 @@ void ofxCanvasPanel::clearButtons() {
     buttons.clear();
 }
 
-
 //--------------------------------------------------------------
-void ofxCanvasPanel::addDrawOption(string msg, ofColor color, bool isLine, float minWidth, float maxWidth, string iconPath) {
+void ofxCanvasPanel::addDrawOption(string name, ofColor color, bool isLine, float minWidth, float maxWidth, string iconPath) {
     int bX, bY, bW, bH, bM;
     int n = buttons.size();
     if (guiIsVertical) {
@@ -106,41 +108,42 @@ void ofxCanvasPanel::addDrawOption(string msg, ofColor color, bool isLine, float
     }
     
     ofxCanvasSettings settings;
+    settings.name = name;
     settings.color = color;
     settings.isLine = isLine;
     settings.minWidth = minWidth;
     settings.maxWidth = maxWidth;
     
     ofxCanvasButton *button = new ofxCanvasButton();
-    button->setup(msg, settings, bX, bY, bW, bH, guiIsVertical);
+    button->setup(name, settings, bX, bY, bW, bH, guiIsVertical);
     if (iconPath != "__NONE__") {
-        button->addIcon(iconPath);
+        button->loadIcon(iconPath);
     }
     buttons.push_back(button);
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::addShapeOption(string msg, ofColor color, float minWidth, float maxWidth, string iconPath) {
-    addDrawOption(msg, color, false, minWidth, maxWidth, iconPath);
+void ofxCanvasPanel::addShapeOption(string name, ofColor color, float minWidth, float maxWidth, string iconPath) {
+    addDrawOption(name, color, false, minWidth, maxWidth, iconPath);
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::addLineOption(string msg, ofColor color, float minWidth, float maxWidth, string iconPath) {
-    addDrawOption(msg, color, true, minWidth, maxWidth, iconPath);
+void ofxCanvasPanel::addLineOption(string name, ofColor color, float minWidth, float maxWidth, string iconPath) {
+    addDrawOption(name, color, true, minWidth, maxWidth, iconPath);
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::addUndoOption(string msg, string iconPath) {
-    addDrawOption(msg, ofColor(0, 0, 0, 0), NULL, NULL, NULL, iconPath);
+void ofxCanvasPanel::addUndoOption(string name, string iconPath) {
+    addDrawOption(name, ofColor(0, 0, 0, 0), NULL, NULL, NULL, iconPath);
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::addClearOption(string msg, string iconPath) {
-    addDrawOption(msg, ofColor::black, NULL, NULL, NULL, iconPath);
+void ofxCanvasPanel::addClearOption(string name, string iconPath) {
+    addDrawOption(name, ofColor::black, NULL, NULL, NULL, iconPath);
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::addSlider(string msg, float minValue, float maxValue) {
+void ofxCanvasPanel::addSlider(string name, float minValue, float maxValue) {
     int bX, bY, bW, bH, bM;
     int n = buttons.size();
     if (guiIsVertical) {
@@ -164,7 +167,7 @@ void ofxCanvasPanel::addSlider(string msg, float minValue, float maxValue) {
     settings.maxWidth = maxValue;
     
     ofxCanvasSlider *slider = new ofxCanvasSlider();
-    slider->setup(msg, settings, bX, bY, bW, bH, guiIsVertical);
+    slider->setup(name, settings, bX, bY, bW, bH, guiIsVertical);
     buttons.push_back(slider);
 }
 
@@ -189,7 +192,6 @@ void ofxCanvasPanel::mousePressed(int x, int y){
         b->mousePressed(x, y);
     }
 }
-
 
 //--------------------------------------------------------------
 void ofxCanvasPanel::mouseReleased(int x, int y){

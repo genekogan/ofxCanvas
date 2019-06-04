@@ -3,27 +3,15 @@
 #include "ofMain.h"
 #include "ofxCanvasSettings.h"
 #include "ofxCanvasEvent.h"
+#include "ofxClickable.h"
 
 
-class ofxCanvasGuiElement {
+
+class ofxCanvasGuiElement : public ofxClickable {
 public:
     ofxCanvasGuiElement();
     void setup(string msg, ofxCanvasSettings settings, int x, int y, int w, int h, bool isVertical);
-    
-    virtual void addIcon(string iconPath);
-    virtual void draw() { }
-
-    virtual void mouseMoved(int x, int y);
-    virtual void mouseDragged(int x, int y);
-    virtual void mousePressed(int x, int y);
-    virtual void mouseReleased(int x, int y);
-    
     ofxCanvasSettings settings;
-
-    ofImage icon;
-    ofRectangle button;
-    string msg;
-    bool isHover, isPressed;
     bool isVertical;
 };
 
@@ -31,9 +19,7 @@ public:
 class ofxCanvasButton : public ofxCanvasGuiElement {
 public:
     ofxCanvasButton() : ofxCanvasGuiElement() { }
-    void mouseReleased(int x, int y);
     void buttonClicked();
-    void draw();
 };
 
 
@@ -43,6 +29,5 @@ public:
     void mouseDragged(int x, int y);
     void draw();
     void sliderChanged();
-    
     float value;
 };

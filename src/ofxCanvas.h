@@ -12,6 +12,8 @@ class ofxCanvasPanel;
 
 class ofxCanvas {
 public:
+    friend class ofxCanvasPanel;
+    
     ofxCanvas();
     ~ofxCanvas();
 
@@ -41,8 +43,9 @@ public:
     void savePrevious();
 
     void setFromPixels(ofPixels & pixels);
+    void setFromImage(string path);
     void clear();
-
+    
 protected:
     
     int width;

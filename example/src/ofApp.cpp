@@ -7,7 +7,7 @@ void ofApp::setup(){
     //canvas.setCanvasPosition(100, 10);
     //canvas.setGuiPosition(10, 10);
     
-    panel.setup(10, 10, 125, false);
+    panel.setup(10, 10, 125, false, &canvas);
     panel.addClearOption("clear", "clear.png");
     panel.addUndoOption("undo", "undo.png");
     panel.addShapeOption("water", ofColor::blue, 10, 100, "water.png");

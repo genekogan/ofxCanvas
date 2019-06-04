@@ -55,11 +55,10 @@ void ofxCanvasPanel::buttonEvent(ofxCanvasButtonEvent &e) {
         canvas->isLine = e.settings.isLine;
         canvas->minWidth = e.settings.minWidth;
         canvas->maxWidth = e.settings.maxWidth;
-    }
-    
-    for (auto b : buttons) {
-        b->setActive(b->getName() == e.settings.name);        
-    }
+        for (auto b : buttons) {
+            b->setActive(b->getName() == e.settings.name);
+        }
+    }    
 }
 
 //--------------------------------------------------------------

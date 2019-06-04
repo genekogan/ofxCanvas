@@ -90,6 +90,8 @@ void ofxCanvas::setFromPixels(ofPixels & pixels) {
     
     ofPopMatrix();
     ofPopStyle();
+    
+    savePrevious();
 }
 
 //--------------------------------------------------------------
@@ -109,7 +111,6 @@ void ofxCanvas::setBackground(ofColor clr) {
 void ofxCanvas::setPosition(int x, int y) {
     canvasR.set(x, y, canvasR.getWidth(), canvasR.getHeight());
 }
-
 
 //--------------------------------------------------------------
 void ofxCanvas::update() {

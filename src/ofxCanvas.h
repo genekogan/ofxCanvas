@@ -46,6 +46,8 @@ public:
     void setFromImage(string path);
     void clear();
     
+    ofRectangle getRectangle() {return canvasR;}
+    
 protected:
     
     int width;

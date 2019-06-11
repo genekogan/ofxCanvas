@@ -50,6 +50,9 @@ void ofxCanvasPanel::buttonEvent(ofxCanvasButtonEvent &e) {
     else if (e.settings.isLine == NULL && e.settings.color == ofColor(0, 0, 0, 0)) {
         canvas->toUndo = true;
     }
+    else if (e.settings.isLine == NULL && e.settings.color == ofColor(255, 0, 0, 0)) {
+        canvas->toRedo = true;
+    }
     else {
         canvas->setCurrentColor(e.settings.color);
         canvas->isLine = e.settings.isLine;
@@ -134,6 +137,11 @@ void ofxCanvasPanel::addLineOption(string name, ofColor color, float minWidth, f
 //--------------------------------------------------------------
 void ofxCanvasPanel::addUndoOption(string name, string iconPath) {
     addDrawOption(name, ofColor(0, 0, 0, 0), NULL, NULL, NULL, iconPath);
+}
+
+//--------------------------------------------------------------
+void ofxCanvasPanel::addRedoOption(string name, string iconPath) {
+    addDrawOption(name, ofColor(255, 0, 0, 0), NULL, NULL, NULL, iconPath);
 }
 
 //--------------------------------------------------------------

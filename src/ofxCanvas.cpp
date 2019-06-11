@@ -37,6 +37,7 @@ void ofxCanvas::setup(int x, int y, int width, int height) {
     toClassify = false;
     toSavePrev = false;
     toUndo = false;
+    toRedo = false;
     toClear = false;
 
     savePrevious();
@@ -99,6 +100,7 @@ void ofxCanvas::setFromImage(string path) {
     ofImage img;
     img.load(path);
     setFromPixels(img.getPixels());
+    changed = true;
 }
 
 //--------------------------------------------------------------
@@ -121,6 +123,10 @@ void ofxCanvas::update() {
     if (toUndo) {
         undo();
         toUndo = false;
+    }
+    if (toRedo) {
+        redo();
+        toRedo = false;
     }
 
     canvas.begin();
@@ -159,10 +165,18 @@ void ofxCanvas::undo() {
 }
 
 //--------------------------------------------------------------
+void ofxCanvas::redo() {
+
+}
+
+//--------------------------------------------------------------
 void ofxCanvas::savePrevious() {
     ofImage prev;
     canvas.readToPixels(prev);
     previous.push_back(prev);
+    if (previous.size() > 10) {
+        previous.erase(previous.begin());
+    }
 }
 
 //--------------------------------------------------------------
@@ -253,6 +267,7 @@ void ofxCanvas::mousePressed(int x, int y){
     for (auto panel : panels) {
         panel->mousePressed(x, y);
     }
+    mouseDragged(x, y);
 }
 
 

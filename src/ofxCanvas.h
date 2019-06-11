@@ -24,6 +24,7 @@ public:
     void setCurrentColor(ofColor clr);
 
     void undo();
+    void redo();
 
     void setPosition(int x, int y);
     
@@ -47,6 +48,7 @@ public:
     void clear();
     
     ofRectangle getRectangle() {return canvasR;}
+    bool toClear;
     
 protected:
     
@@ -64,7 +66,7 @@ protected:
     bool toClassify;
     bool toSavePrev;
     bool toUndo;
-    bool toClear;
+    bool toRedo;
     
     vector<ofImage> previous;
     vector<ofVec2f> points;

@@ -29,7 +29,9 @@ public:
     void addShapeOption(string name, ofColor color, float minWidth, float maxWidth) {addShapeOption(name, color, minWidth, maxWidth, "__NONE__");}
     
     void addUndoOption(string name, string iconPath);
-    void addUndoOption(string name) {addUndoOption(name, NULL);}
+    void addUndoOption(string name) {addRedoOption(name, NULL);}
+    void addRedoOption(string name, string iconPath);
+    void addRedoOption(string name) {addRedoOption(name, NULL);}
     
     void addClearOption(string name, string iconPath);
     void addClearOption(string name) {addClearOption(name, NULL);}
@@ -42,6 +44,8 @@ public:
     void mouseDragged(int x, int y);
     void mousePressed(int x, int y);
     void mouseReleased(int x, int y);
+
+    ofxCanvasGuiElement * getElement(int idx) {return buttons[idx];} 
     
 protected:
     

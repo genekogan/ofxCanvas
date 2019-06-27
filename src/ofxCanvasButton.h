@@ -11,6 +11,7 @@ class ofxCanvasGuiElement : public ofxClickable {
 public:
     ofxCanvasGuiElement();
     void setup(string msg, ofxCanvasSettings settings, int x, int y, int w, int h, bool isVertical);
+    string getPanelName() {return settings.panelName;}
     ofxCanvasSettings settings;
     bool isVertical;
 };

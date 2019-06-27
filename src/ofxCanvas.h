@@ -22,7 +22,8 @@ public:
     void setup(int x, int y, int width, int height);
     void setBackground(ofColor clr);
     void setCurrentColor(ofColor clr);
-
+    void setMaxHistory(int maxHistory) {this->maxHistory = maxHistory;}
+    
     void undo();
     void redo();
 
@@ -32,7 +33,9 @@ public:
     void draw();
     void drawPanels();
     
+    int getMaxHistory() {return maxHistory;}
     ofFbo & getCanvas() {return canvas;}
+
     bool isFrameNew();
     bool isShapeNew();
     
@@ -52,16 +55,20 @@ public:
     
 protected:
     
+    void resetMouse();
+    
     int width;
     int height;
     bool isLine;
     float minWidth, maxWidth;
     float value;
+    int maxHistory;
     ofColor bgColor;
     ofColor currentColor;
 
     ofRectangle canvasR;
     ofFbo canvas;
+    ofImage canvasOut;
     bool changed;
     bool toClassify;
     bool toSavePrev;
@@ -72,5 +79,6 @@ protected:
     vector<ofVec2f> points;
     vector<ofxCanvasPanel*> panels;
 
+    ofVec2f mouse, prevMouse;
 };
 

@@ -14,29 +14,37 @@ public:
     ofxCanvasPanel();
     ~ofxCanvasPanel();
     
-    void setup(int x, int y, int guiWidth, bool guiIsVertical, ofxCanvas *canvas);
+    string getPanelName() {return panelName;}
+    
+    void setup(string panelName, int x, int y, int guiWidth, bool guiIsVertical, ofxCanvas *canvas);
     void setPosition(int x, int y);
     
     void draw();
     
-    void addDrawOption(string name, ofColor color, bool isLine, float minWidth, float maxWidth, string iconPath);
-    void addDrawOption(string name, ofColor color, bool isLine, float minWidth, float maxWidth) {addDrawOption(name, color, isLine, minWidth, maxWidth, "__NONE__");}
+    ofxCanvasGuiElement * addDrawOption(string name, ofColor color, bool isLine, float minWidth, float maxWidth, string iconPath);
+    ofxCanvasGuiElement * addDrawOption(string name, ofColor color, bool isLine, float minWidth, float maxWidth) {return addDrawOption(name, color, isLine, minWidth, maxWidth, "__NONE__");}
     
-    void addLineOption(string name, ofColor color, float minWidth, float maxWidth, string iconPath);
-    void addLineOption(string name, ofColor color, float minWidth, float maxWidth) {addLineOption(name, color, minWidth, maxWidth, "__NONE__");}
+    ofxCanvasGuiElement * addLineOption(string name, ofColor color, float minWidth, float maxWidth, string iconPath);
+    ofxCanvasGuiElement * addLineOption(string name, ofColor color, float minWidth, float maxWidth) {return addLineOption(name, color, minWidth, maxWidth, "__NONE__");}
     
-    void addShapeOption(string name, ofColor color, float minWidth, float maxWidth, string iconPath);
-    void addShapeOption(string name, ofColor color, float minWidth, float maxWidth) {addShapeOption(name, color, minWidth, maxWidth, "__NONE__");}
+    ofxCanvasGuiElement * addShapeOption(string name, ofColor color, float minWidth, float maxWidth, string iconPath);
+    ofxCanvasGuiElement * addShapeOption(string name, ofColor color, float minWidth, float maxWidth) {return addShapeOption(name, color, minWidth, maxWidth, "__NONE__");}
     
-    void addUndoOption(string name, string iconPath);
-    void addUndoOption(string name) {addRedoOption(name, NULL);}
-    void addRedoOption(string name, string iconPath);
-    void addRedoOption(string name) {addRedoOption(name, NULL);}
+    ofxCanvasGuiElement * addUndoOption(string name, string iconPath);
+    ofxCanvasGuiElement * addUndoOption(string name) {return addRedoOption(name, NULL);}
+    ofxCanvasGuiElement * addRedoOption(string name, string iconPath);
+    ofxCanvasGuiElement * addRedoOption(string name) {return addRedoOption(name, NULL);}
     
-    void addClearOption(string name, string iconPath);
-    void addClearOption(string name) {addClearOption(name, NULL);}
-    
-    void addSlider(string name, float minValue, float maxValue);
+    ofxCanvasGuiElement * addClearOption(string name, string iconPath);
+    ofxCanvasGuiElement * addClearOption(string name) {return addClearOption(name, NULL);}
+
+    ofxCanvasGuiElement * addBrushSizeOption(string name, int value, string iconPath);
+    ofxCanvasGuiElement * addBrushSizeOption(string name, int value) {return addBrushSizeOption(name, value, NULL);}
+
+    ofxCanvasGuiElement * addMiscOption(string name, string iconPath);
+    ofxCanvasGuiElement * addMiscOption(string name) {return addMiscOption(name, NULL);}
+
+    ofxCanvasGuiElement * addSlider(string name, float minValue, float maxValue);
     
     void clearButtons();
     
@@ -45,7 +53,8 @@ public:
     void mousePressed(int x, int y);
     void mouseReleased(int x, int y);
 
-    ofxCanvasGuiElement * getElement(int idx) {return buttons[idx];} 
+    ofxCanvasGuiElement * getElement(int idx) {return buttons[idx];}
+    vector<ofxCanvasGuiElement*> getElements() {return buttons;}
     
 protected:
     
@@ -58,7 +67,7 @@ protected:
     bool guiIsVertical;
     int guiWidth;
     int guiEnd;
-    
+    string panelName;    
     ofRectangle guiR;
     
 };

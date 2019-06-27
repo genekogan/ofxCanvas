@@ -13,7 +13,8 @@ ofxCanvasPanel::~ofxCanvasPanel() {
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::setup(int x, int y, int guiWidth, bool guiIsVertical, ofxCanvas *canvas) {
+void ofxCanvasPanel::setup(string panelName, int x, int y, int guiWidth, bool guiIsVertical, ofxCanvas *canvas) {
+    this->panelName = panelName;
     this->guiIsVertical = guiIsVertical;
     this->guiWidth = guiWidth;
     this->canvas = canvas;
@@ -44,6 +45,9 @@ void ofxCanvasPanel::setPosition(int x, int y) {
 
 //--------------------------------------------------------------
 void ofxCanvasPanel::buttonEvent(ofxCanvasButtonEvent &e) {
+    cout << "BUTTON EVENT!~!! " << endl;
+    cout << e.settings.color << endl;
+    
     if (e.settings.isLine == NULL && (e.settings.color == ofColor::black)) {
         canvas->toClear = true;
     }
@@ -53,15 +57,37 @@ void ofxCanvasPanel::buttonEvent(ofxCanvasButtonEvent &e) {
     else if (e.settings.isLine == NULL && e.settings.color == ofColor(255, 0, 0, 0)) {
         canvas->toRedo = true;
     }
-    else {
-        canvas->setCurrentColor(e.settings.color);
-        canvas->isLine = e.settings.isLine;
+    else if (e.settings.isLine == NULL && e.settings.color == ofColor(0, 255, 0, 0)) {
         canvas->minWidth = e.settings.minWidth;
         canvas->maxWidth = e.settings.maxWidth;
-        for (auto b : buttons) {
-            b->setActive(b->getName() == e.settings.name);
+        cout << "GO SET ACTIVE " << endl;
+        if (getPanelName() == e.settings.panelName) {
+            for (auto b : buttons) {
+                cout << "set active " << b->getName() << endl;
+                b->setActive(b->getName() == e.settings.name);
+            }
         }
-    }    
+    }
+    else if (e.settings.isLine == NULL && e.settings.color == ofColor(0, 0, 255, 0)) {
+        ofLog() << "Misc event";
+    }
+    else {
+        cout << "GO sfkjasfkjas " << endl;
+        canvas->setCurrentColor(e.settings.color);
+        canvas->isLine = e.settings.isLine;
+        if (e.settings.minWidth != NULL) {
+            canvas->minWidth = e.settings.minWidth;
+            canvas->maxWidth = e.settings.maxWidth;
+        }
+        cout << " - > " << getPanelName()  << " == " << e.settings.panelName << " " << (getPanelName() == e.settings.panelName) << endl;
+        if (getPanelName() == e.settings.panelName) {
+            cout << "GO SET ACTIVE " << endl;
+            for (auto b : buttons) {
+                cout << "set active " << b->getName() << endl;
+                b->setActive(b->getName() == e.settings.name);
+            }
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -90,7 +116,7 @@ void ofxCanvasPanel::clearButtons() {
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::addDrawOption(string name, ofColor color, bool isLine, float minWidth, float maxWidth, string iconPath) {
+ofxCanvasGuiElement * ofxCanvasPanel::addDrawOption(string name, ofColor color, bool isLine, float minWidth, float maxWidth, string iconPath) {
     int bX, bY, bW, bH, bM;
     int n = buttons.size();
     if (guiIsVertical) {
@@ -110,6 +136,7 @@ void ofxCanvasPanel::addDrawOption(string name, ofColor color, bool isLine, floa
     }
     
     ofxCanvasSettings settings;
+    settings.panelName = panelName;
     settings.name = name;
     settings.color = color;
     settings.isLine = isLine;
@@ -122,35 +149,37 @@ void ofxCanvasPanel::addDrawOption(string name, ofColor color, bool isLine, floa
         button->loadIcon(iconPath);
     }
     buttons.push_back(button);
+    
+    return button;
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::addShapeOption(string name, ofColor color, float minWidth, float maxWidth, string iconPath) {
-    addDrawOption(name, color, false, minWidth, maxWidth, iconPath);
+ofxCanvasGuiElement * ofxCanvasPanel::addShapeOption(string name, ofColor color, float minWidth, float maxWidth, string iconPath) {
+    return addDrawOption(name, color, false, minWidth, maxWidth, iconPath);
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::addLineOption(string name, ofColor color, float minWidth, float maxWidth, string iconPath) {
-    addDrawOption(name, color, true, minWidth, maxWidth, iconPath);
+ofxCanvasGuiElement * ofxCanvasPanel::addLineOption(string name, ofColor color, float minWidth, float maxWidth, string iconPath) {
+    return addDrawOption(name, color, true, minWidth, maxWidth, iconPath);
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::addUndoOption(string name, string iconPath) {
-    addDrawOption(name, ofColor(0, 0, 0, 0), NULL, NULL, NULL, iconPath);
+ofxCanvasGuiElement * ofxCanvasPanel::addUndoOption(string name, string iconPath) {
+    return addDrawOption(name, ofColor(0, 0, 0, 0), NULL, NULL, NULL, iconPath);
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::addRedoOption(string name, string iconPath) {
-    addDrawOption(name, ofColor(255, 0, 0, 0), NULL, NULL, NULL, iconPath);
+ofxCanvasGuiElement * ofxCanvasPanel::addRedoOption(string name, string iconPath) {
+    return addDrawOption(name, ofColor(255, 0, 0, 0), NULL, NULL, NULL, iconPath);
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::addClearOption(string name, string iconPath) {
-    addDrawOption(name, ofColor::black, NULL, NULL, NULL, iconPath);
+ofxCanvasGuiElement * ofxCanvasPanel::addClearOption(string name, string iconPath) {
+    return addDrawOption(name, ofColor::black, NULL, NULL, NULL, iconPath);
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::addSlider(string name, float minValue, float maxValue) {
+ofxCanvasGuiElement * ofxCanvasPanel::addSlider(string name, float minValue, float maxValue) {
     int bX, bY, bW, bH, bM;
     int n = buttons.size();
     if (guiIsVertical) {
@@ -176,8 +205,19 @@ void ofxCanvasPanel::addSlider(string name, float minValue, float maxValue) {
     ofxCanvasSlider *slider = new ofxCanvasSlider();
     slider->setup(name, settings, bX, bY, bW, bH, guiIsVertical);
     buttons.push_back(slider);
+    
+    return slider;
 }
 
+//--------------------------------------------------------------
+ofxCanvasGuiElement * ofxCanvasPanel::addBrushSizeOption(string name, int value, string iconPath) {
+    return addDrawOption(name, ofColor(0, 255, 0, 0), NULL, value, value, iconPath);
+}
+
+//--------------------------------------------------------------
+ofxCanvasGuiElement * ofxCanvasPanel::addMiscOption(string name, string iconPath) {
+    return addDrawOption(name, ofColor(0, 0, 255, 0), NULL, NULL, NULL, iconPath);
+}
 
 //--------------------------------------------------------------
 void ofxCanvasPanel::mouseMoved(int x, int y){
@@ -206,4 +246,3 @@ void ofxCanvasPanel::mouseReleased(int x, int y){
         b->mouseReleased(x, y);
     }
 }
-

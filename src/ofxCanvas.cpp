@@ -8,9 +8,11 @@ ofxCanvas::ofxCanvas() {
     value = 0.5;
     minWidth = 1;
     maxWidth = 5;
+    maxHistory = 64;
     bgColor = ofColor(255);
     toUndo = false;
     toClear = false;
+    resetMouse();
 }
 
 //--------------------------------------------------------------
@@ -78,7 +80,7 @@ void ofxCanvas::setFromPixels(ofPixels & pixels) {
     ofImage newImg;
     newImg.setFromPixels(pixels);
     newImg.resize(width, height);
-
+    
     canvas.begin();
     
     ofFill();
@@ -174,7 +176,7 @@ void ofxCanvas::savePrevious() {
     ofImage prev;
     canvas.readToPixels(prev);
     previous.push_back(prev);
-    if (previous.size() > 10) {
+    if (previous.size() > maxHistory) {
         previous.erase(previous.begin());
     }
 }
@@ -230,11 +232,18 @@ void ofxCanvas::mouseDragged(int x, int y){
     for (auto panel : panels) {
         panel->mouseDragged(x, y);
     }
-
-    float x1 = ofGetPreviousMouseX()-canvasR.getX();
-    float y1 = ofGetPreviousMouseY()-canvasR.getY();
-    float x2 = ofGetMouseX()-canvasR.getX();
-    float y2 = ofGetMouseY()-canvasR.getY();
+    
+    if (prevMouse.x == -1e8) {
+        prevMouse.set(ofGetMouseX(), ofGetMouseY());
+    }
+    mouse.set(ofGetMouseX(), ofGetMouseY());
+    
+    float x1 = prevMouse.x - canvasR.getX();
+    float y1 = prevMouse.y - canvasR.getY();
+    float x2 = mouse.x - canvasR.getX();
+    float y2 = mouse.y - canvasR.getY();
+    
+    prevMouse.set(mouse.x, mouse.y);
     
     if (x2 < 0 || x2 > canvasR.getWidth() || y2 < 0 || y2 > canvasR.getHeight()) {
         return;
@@ -256,7 +265,15 @@ void ofxCanvas::mouseDragged(int x, int y){
     else {
         ofFill();
         float rad = ofLerp(minWidth, maxWidth, value);
-        ofDrawEllipse(x2, y2, rad, rad);
+        
+        float d2 = ofDist(x1, y1, x2, y2);
+        int n = 1 + 6 * int(d2 / rad);
+        
+        for (int i=0; i<n; i++) {
+            float x2_ = ofMap(i, 0, n-1, x1, x2);
+            float y2_ = ofMap(i, 0, n-1, y1, y2);
+            ofDrawEllipse(x2_, y2_, rad, rad);
+        }
     }
     
     canvas.end();
@@ -285,5 +302,12 @@ void ofxCanvas::mouseReleased(int x, int y){
         toSavePrev = false;
         savePrevious();
     }
+    
+    resetMouse();
 }
 
+//--------------------------------------------------------------
+void ofxCanvas::resetMouse() {
+    mouse = ofVec2f(-1e8, -1e8);
+    prevMouse = ofVec2f(-1e8, -1e8);
+}

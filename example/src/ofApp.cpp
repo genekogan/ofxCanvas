@@ -7,9 +7,10 @@ void ofApp::setup(){
     //canvas.setCanvasPosition(100, 10);
     //canvas.setGuiPosition(10, 10);
     
-    panel.setup(10, 10, 125, false, &canvas);
+    panel.setup("myPanel", 10, 10, 125, false, &canvas);
     panel.addClearOption("clear", "clear.png");
     panel.addUndoOption("undo", "undo.png");
+    panel.addRedoOption("redo", "redo.png");
     panel.addShapeOption("water", ofColor::blue, 10, 100, "water.png");
     panel.addShapeOption("park", ofColor::green, 10, 100, "tree.png");
     panel.addShapeOption("buildings", ofColor::red, 5, 50, "house.png");
@@ -29,7 +30,6 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
 }
 
 //--------------------------------------------------------------

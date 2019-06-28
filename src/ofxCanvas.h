@@ -55,6 +55,7 @@ public:
     
 protected:
     
+    void updateCanvasFromPrevious();
     void resetMouse();
     
     int width;
@@ -80,5 +81,8 @@ protected:
     vector<ofxCanvasPanel*> panels;
 
     ofVec2f mouse, prevMouse;
+    
+    
+    int idxP;
 };
 

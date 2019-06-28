@@ -6,12 +6,14 @@ ofxCanvas::ofxCanvas() {
     currentColor = ofColor::black;
     isLine = true;
     value = 0.5;
+    idxP = 0;
     minWidth = 1;
     maxWidth = 5;
     maxHistory = 64;
     bgColor = ofColor(255);
     toUndo = false;
     toClear = false;
+    previous.clear();
     resetMouse();
 }
 
@@ -150,35 +152,45 @@ void ofxCanvas::setCurrentColor(ofColor clr) {
     currentColor = clr;
 }
 
-
 //--------------------------------------------------------------
-void ofxCanvas::undo() {
-    if (previous.size() < 2) {
-        return;
-    }
-    
+void ofxCanvas::updateCanvasFromPrevious() {
     canvas.begin();
-    previous[previous.size()-2].draw(0, 0);
+    previous[idxP].draw(0, 0);
     canvas.end();
-    previous.pop_back();
-
     changed = true;
     toClassify = true;
 }
 
 //--------------------------------------------------------------
-void ofxCanvas::redo() {
+void ofxCanvas::undo() {
+    if (previous.size() < 1) {
+        return;
+    }
+    idxP = max(0, idxP-1);
+    updateCanvasFromPrevious();
+}
 
+//--------------------------------------------------------------
+void ofxCanvas::redo() {
+    if (idxP >= (int)previous.size()-1) {
+        return;
+    }
+    idxP = min((int)previous.size()-1, idxP+1);
+    updateCanvasFromPrevious();
 }
 
 //--------------------------------------------------------------
 void ofxCanvas::savePrevious() {
+    while (!previous.empty() && idxP < (previous.size()-1)) {
+        previous.pop_back();
+    }
     ofImage prev;
     canvas.readToPixels(prev);
     previous.push_back(prev);
     if (previous.size() > maxHistory) {
         previous.erase(previous.begin());
     }
+    idxP = previous.size()-1;
 }
 
 //--------------------------------------------------------------

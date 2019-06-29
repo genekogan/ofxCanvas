@@ -90,6 +90,28 @@ void ofxCanvasPanel::buttonEvent(ofxCanvasButtonEvent &e) {
     }
 }
 
+
+
+
+
+//--------------------------------------------------------------
+void ofxCanvasPanel::setButtonEnabled(string name, bool toEnable) {
+    for (auto b : buttons) {
+        if (b->getName() == name) {
+            b->setEnabled(toEnable);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
 //--------------------------------------------------------------
 void ofxCanvasPanel::sliderEvent(ofxCanvasSliderEvent &e) {
     canvas->value = e.value;

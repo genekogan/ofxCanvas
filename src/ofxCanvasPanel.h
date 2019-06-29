@@ -55,6 +55,10 @@ public:
 
     ofxCanvasGuiElement * getElement(int idx) {return buttons[idx];}
     vector<ofxCanvasGuiElement*> getElements() {return buttons;}
+
+
+
+    void setButtonEnabled(string name, bool toEnable);
     
 protected:
     

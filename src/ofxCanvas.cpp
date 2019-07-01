@@ -168,6 +168,7 @@ void ofxCanvas::undo() {
     }
     idxP = max(0, idxP-1);
     updateCanvasFromPrevious();
+    checkUndoRedo();
 }
 
 //--------------------------------------------------------------
@@ -177,6 +178,18 @@ void ofxCanvas::redo() {
     }
     idxP = min((int)previous.size()-1, idxP+1);
     updateCanvasFromPrevious();
+    checkUndoRedo();
+}
+
+//--------------------------------------------------------------
+void ofxCanvas::checkUndoRedo() {
+    bool undoPossible = (idxP > 0);
+    bool redoPossible = (idxP < previous.size()-1);
+    for (auto p : panels) {
+        p->setButtonEnabled("undo", undoPossible);
+        p->setButtonEnabled("clear", undoPossible);
+        p->setButtonEnabled("redo", redoPossible);
+    }
 }
 
 //--------------------------------------------------------------
@@ -191,6 +204,7 @@ void ofxCanvas::savePrevious() {
         previous.erase(previous.begin());
     }
     idxP = previous.size()-1;
+    checkUndoRedo();
 }
 
 //--------------------------------------------------------------

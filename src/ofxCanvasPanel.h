@@ -47,7 +47,8 @@ public:
     ofxCanvasGuiElement * addSlider(string name, float minValue, float maxValue);
     
     void clearButtons();
-    
+    void setButtonEnabled(string name, bool toEnable);
+
     void mouseMoved(int x, int y);
     void mouseDragged(int x, int y);
     void mousePressed(int x, int y);
@@ -55,10 +56,6 @@ public:
 
     ofxCanvasGuiElement * getElement(int idx) {return buttons[idx];}
     vector<ofxCanvasGuiElement*> getElements() {return buttons;}
-
-
-
-    void setButtonEnabled(string name, bool toEnable);
     
 protected:
     

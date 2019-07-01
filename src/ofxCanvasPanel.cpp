@@ -45,9 +45,6 @@ void ofxCanvasPanel::setPosition(int x, int y) {
 
 //--------------------------------------------------------------
 void ofxCanvasPanel::buttonEvent(ofxCanvasButtonEvent &e) {
-    cout << "BUTTON EVENT!~!! " << endl;
-    cout << e.settings.color << endl;
-    
     if (e.settings.isLine == NULL && (e.settings.color == ofColor::black)) {
         canvas->toClear = true;
     }
@@ -60,10 +57,8 @@ void ofxCanvasPanel::buttonEvent(ofxCanvasButtonEvent &e) {
     else if (e.settings.isLine == NULL && e.settings.color == ofColor(0, 255, 0, 0)) {
         canvas->minWidth = e.settings.minWidth;
         canvas->maxWidth = e.settings.maxWidth;
-        cout << "GO SET ACTIVE " << endl;
         if (getPanelName() == e.settings.panelName) {
             for (auto b : buttons) {
-                cout << "set active " << b->getName() << endl;
                 b->setActive(b->getName() == e.settings.name);
             }
         }
@@ -72,27 +67,19 @@ void ofxCanvasPanel::buttonEvent(ofxCanvasButtonEvent &e) {
         ofLog() << "Misc event";
     }
     else {
-        cout << "GO sfkjasfkjas " << endl;
         canvas->setCurrentColor(e.settings.color);
         canvas->isLine = e.settings.isLine;
         if (e.settings.minWidth != NULL) {
             canvas->minWidth = e.settings.minWidth;
             canvas->maxWidth = e.settings.maxWidth;
         }
-        cout << " - > " << getPanelName()  << " == " << e.settings.panelName << " " << (getPanelName() == e.settings.panelName) << endl;
         if (getPanelName() == e.settings.panelName) {
-            cout << "GO SET ACTIVE " << endl;
             for (auto b : buttons) {
-                cout << "set active " << b->getName() << endl;
                 b->setActive(b->getName() == e.settings.name);
             }
         }
     }
 }
-
-
-
-
 
 //--------------------------------------------------------------
 void ofxCanvasPanel::setButtonEnabled(string name, bool toEnable) {
@@ -102,15 +89,6 @@ void ofxCanvasPanel::setButtonEnabled(string name, bool toEnable) {
         }
     }
 }
-
-
-
-
-
-
-
-
-
 
 //--------------------------------------------------------------
 void ofxCanvasPanel::sliderEvent(ofxCanvasSliderEvent &e) {

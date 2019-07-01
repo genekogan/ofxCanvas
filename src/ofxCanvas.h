@@ -56,6 +56,7 @@ public:
 protected:
     
     void updateCanvasFromPrevious();
+    void checkUndoRedo();
     void resetMouse();
     
     int width;

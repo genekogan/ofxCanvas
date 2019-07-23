@@ -210,6 +210,12 @@ ofxCanvasGuiElement * ofxCanvasPanel::addSlider(string name, float minValue, flo
 }
 
 //--------------------------------------------------------------
+void ofxCanvasPanel::selectRandomOption() {
+    int bIdx = int(ofRandom(buttons.size()));
+    buttons[bIdx]->buttonClicked();
+}
+
+//--------------------------------------------------------------
 ofxCanvasGuiElement * ofxCanvasPanel::addBrushSizeOption(string name, int value, string iconPath) {
     return addDrawOption(name, ofColor(0, 255, 0, 0), NULL, value, value, iconPath);
 }

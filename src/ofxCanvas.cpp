@@ -260,9 +260,9 @@ void ofxCanvas::mouseDragged(int x, int y){
     }
     
     if (prevMouse.x == -1e8) {
-        prevMouse.set(ofGetMouseX(), ofGetMouseY());
+        prevMouse.set(x, y);
     }
-    mouse.set(ofGetMouseX(), ofGetMouseY());
+    mouse.set(x, y);
     
     float x1 = prevMouse.x - canvasR.getX();
     float y1 = prevMouse.y - canvasR.getY();

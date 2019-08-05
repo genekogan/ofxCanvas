@@ -97,6 +97,7 @@ void ofxCanvas::setFromPixels(ofPixels & pixels) {
     ofPopStyle();
     
     savePrevious();
+    changed = true;
 }
 
 //--------------------------------------------------------------
@@ -104,7 +105,6 @@ void ofxCanvas::setFromImage(string path) {
     ofImage img;
     img.load(path);
     setFromPixels(img.getPixels());
-    changed = true;
 }
 
 //--------------------------------------------------------------

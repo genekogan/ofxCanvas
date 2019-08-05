@@ -7,7 +7,7 @@ void ofApp::setup(){
     //canvas.setCanvasPosition(100, 10);
     //canvas.setGuiPosition(10, 10);
     
-    panel.setup("myPanel", 10, 10, 125, false, &canvas);
+    panel.setup("myPanel", 10, 10, 125, 5, false, &canvas);
     panel.addClearOption("clear", "clear.png");
     panel.addUndoOption("undo", "undo.png");
     panel.addRedoOption("redo", "redo.png");

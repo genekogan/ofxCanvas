@@ -16,9 +16,19 @@ public:
     
     string getPanelName() {return panelName;}
     
-    void setup(string panelName, int x, int y, int guiWidth, bool guiIsVertical, ofxCanvas *canvas);
+    void setup(string panelName, int x, int y, int guiWidth, int buttonMargin, bool guiIsVertical, ofxCanvas *canvas);
     void setPosition(int x, int y);
+
+    void setButtonMargin(int buttonMargin) {this->buttonMargin = buttonMargin;}
+    void setGuiWidth(int guiWidth) {this->guiWidth = guiWidth;}
+    void setGuiVertical(bool guiIsVertical) {this->guiIsVertical = guiIsVertical;}
+    void setGuiBgDraw(bool drawBg) {this->drawBg = drawBg;}
     
+    int getButtonMargin() {return buttonMargin;}
+    int getGuiWidth() {return guiWidth;}
+    bool getGuiVertical() {return guiIsVertical;}
+    bool getGuiBgDraw() {return drawBg;}
+
     void draw();
     
     ofxCanvasGuiElement * addDrawOption(string name, ofColor color, bool isLine, float minWidth, float maxWidth, string iconPath);
@@ -70,7 +80,8 @@ protected:
     bool guiIsVertical;
     int guiWidth;
     int guiEnd;
+    int buttonMargin;
     string panelName;    
     ofRectangle guiR;
-    
+    bool drawBg;
 };

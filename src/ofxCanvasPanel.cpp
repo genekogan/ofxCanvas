@@ -4,7 +4,10 @@
 //--------------------------------------------------------------
 ofxCanvasPanel::ofxCanvasPanel() {
     guiIsVertical = false;
-    guiEnd = 0;
+    guiWidth = 0;
+    guiEnd = 5;
+    buttonMargin = 5;
+    drawBg = true;
 }
 
 //--------------------------------------------------------------
@@ -13,10 +16,11 @@ ofxCanvasPanel::~ofxCanvasPanel() {
 }
 
 //--------------------------------------------------------------
-void ofxCanvasPanel::setup(string panelName, int x, int y, int guiWidth, bool guiIsVertical, ofxCanvas *canvas) {
+void ofxCanvasPanel::setup(string panelName, int x, int y, int guiWidth, int buttonMargin, bool guiIsVertical, ofxCanvas *canvas) {
     this->panelName = panelName;
     this->guiIsVertical = guiIsVertical;
     this->guiWidth = guiWidth;
+    this->buttonMargin = buttonMargin;
     this->canvas = canvas;
     canvas->addPanel(this);
     
@@ -99,7 +103,9 @@ void ofxCanvasPanel::sliderEvent(ofxCanvasSliderEvent &e) {
 void ofxCanvasPanel::draw() {
     ofPushStyle();
     ofSetColor(ofColor::black);
-    ofDrawRectangle(guiR);
+    if (drawBg) {
+        ofDrawRectangle(guiR);
+    }
     for (int i=0; i<buttons.size(); i++) {
         buttons[i]->draw();
     }
@@ -124,15 +130,19 @@ ofxCanvasGuiElement * ofxCanvasPanel::addDrawOption(string name, ofColor color, 
         bW = guiWidth - 10;
         bH = bW;
         bX = guiR.getX() + 5;
-        bY = guiEnd + 5;
+        bY = guiEnd + (n > 0 ? buttonMargin : 5);
         guiEnd = bY + bH;
+        guiR.set(guiR.getX(), guiR.getY(),
+                 guiWidth, bY + bH + buttonMargin);
     } else {
         bM = 10;
         bH = guiWidth - 10;
         bW = bH;
-        bX = guiEnd + 5;
+        bX = guiEnd + (n > 0 ? buttonMargin : 5);
         bY = guiR.getY() + 5;
         guiEnd = bX + bW;
+        guiR.set(guiR.getX(), guiR.getY(),
+                 bX + bW + buttonMargin, guiWidth);
     }
     
     ofxCanvasSettings settings;
@@ -187,15 +197,20 @@ ofxCanvasGuiElement * ofxCanvasPanel::addSlider(string name, float minValue, flo
         bW = 0.75 * guiWidth - 10;
         bH = 200;
         bX = guiR.getX() + 5 + 0.125 * guiWidth;
-        bY = guiEnd + 5;
+        bY = guiEnd + (n > 0 ? buttonMargin : 5);
         guiEnd = bY + bH;
+        guiR.set(guiR.getX(), guiR.getY(),
+                 guiWidth, bY + bH + buttonMargin);
+
     } else {
         bM = 10;
         bW = 200;
         bH = 0.75 * guiWidth - 10;
-        bX = guiEnd + 5;
+        bX = guiEnd + (n > 0 ? buttonMargin : 5);
         bY = guiR.getY() + 5 + 0.125 * guiWidth;
         guiEnd = bX + bW;
+        guiR.set(guiR.getX(), guiR.getY(),
+                 bX + bW + buttonMargin, guiWidth);
     }
     
     ofxCanvasSettings settings;

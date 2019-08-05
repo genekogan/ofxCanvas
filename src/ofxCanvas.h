@@ -67,6 +67,9 @@ protected:
     int maxHistory;
     ofColor bgColor;
     ofColor currentColor;
+    ofVec2f mouse;
+    ofVec2f prevMouse;
+    int idxP;
 
     ofRectangle canvasR;
     ofFbo canvas;
@@ -80,10 +83,5 @@ protected:
     vector<ofImage> previous;
     vector<ofVec2f> points;
     vector<ofxCanvasPanel*> panels;
-
-    ofVec2f mouse, prevMouse;
-    
-    
-    int idxP;
 };
 

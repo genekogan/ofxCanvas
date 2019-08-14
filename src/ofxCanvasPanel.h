@@ -67,6 +67,7 @@ public:
     ofxCanvasGuiElement * getElement(int idx) {return buttons[idx];}
     vector<ofxCanvasGuiElement*> getElements() {return buttons;}
     
+    void selectOption(int idx);
     void selectRandomOption();
     
 protected:

@@ -225,9 +225,14 @@ ofxCanvasGuiElement * ofxCanvasPanel::addSlider(string name, float minValue, flo
 }
 
 //--------------------------------------------------------------
+void ofxCanvasPanel::selectOption(int idx) {
+    buttons[idx]->buttonClicked();
+}
+
+//--------------------------------------------------------------
 void ofxCanvasPanel::selectRandomOption() {
-    int bIdx = int(ofRandom(buttons.size()));
-    buttons[bIdx]->buttonClicked();
+    int randomIdx = int(ofRandom(buttons.size()));
+    selectOption(randomIdx);
 }
 
 //--------------------------------------------------------------
